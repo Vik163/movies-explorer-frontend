@@ -1,0 +1,10 @@
+.popup__input-error {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 34px;
+  z-index: 2;
+}
+
+
+

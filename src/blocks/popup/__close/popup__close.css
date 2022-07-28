@@ -1,0 +1,30 @@
+.popup__close {
+  display: flex;
+  align-items: stretch;
+  position: absolute;
+  top: -45px;
+  right: -45px;
+  width: 40px;
+  height: 40px;
+  transform: rotate(45deg);
+  background: none;
+  background-image: url(../../../images/add-button.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40px 40px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .popup__close {
+    top: -37px;
+    right: 0;
+    width: 25px;
+    height: 25px;
+    background-size: 25px 25px;
+  }
+}
+
+

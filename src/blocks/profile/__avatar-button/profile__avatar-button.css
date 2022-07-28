@@ -1,0 +1,15 @@
+.profile__avatar-button {
+  display: none;
+  position: absolute;
+  top: -4%;
+  left: -4%;
+  width: 110%;
+  height: 110%;
+  background-color: black;
+  background-image: url(../../../images/avatar-edit.png);
+  background-repeat: no-repeat;
+  background-size: 26px 26px;
+  background-position: center;
+  border-radius: 50%;
+  cursor: pointer;
+}

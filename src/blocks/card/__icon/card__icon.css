@@ -1,0 +1,17 @@
+.card__icon {
+  display: flex;
+  align-items: stretch;
+  width: 22px;
+  width: 100%;
+  height: 19px;
+  background: none;
+  background-image: url(../../../images/Group.svg);
+  background-repeat: no-repeat;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+.card__icon:hover {
+  opacity: 0.5;
+}

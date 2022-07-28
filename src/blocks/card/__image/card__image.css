@@ -1,0 +1,13 @@
+.card__image {
+  display: block;
+  height: 282px;
+  width: 282px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 760px) {
+  .place__image {
+    margin: 32px 0;
+  }
+}
