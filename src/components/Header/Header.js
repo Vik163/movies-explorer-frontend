@@ -96,16 +96,6 @@ function Header(props) {
             className='header__menu-shadow'
             style={{ display: isAddInfo.display }}
           ></div>
-          {/* <div className='header__menu' style={{ display: isAddInfo.display }}>
-            <Link
-              className='header__link button-hover'
-              onClick={props.signOut}
-              to={props.link}
-            >
-              Главная
-            </Link>
-            {headerInfo}
-          </div> */}
           {isAddInfo.src === closeIcon ? (
             <div
               className='header__menu'

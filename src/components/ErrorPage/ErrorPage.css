@@ -1,0 +1,66 @@
+.errorPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: white;
+  position: relative;
+}
+
+.errorPage__status {
+  margin: 0 0 5px;
+  font-size: 140px;
+  line-height: 170px;
+  font-weight: 400;
+}
+
+@media screen and (max-width: 600px) {
+  .errorPage__status {
+    font-size: 80px;
+    line-height: 97px;
+    margin: 0 0 10px;
+  }
+}
+
+.errorPage__message {
+  margin: 0;
+  width: 400px;
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 400;
+}
+
+@media screen and (max-width: 600px) {
+  .errorPage__message {
+    font-size: 12px;
+    line-height: 14px;
+    width: 300px;
+    text-align: center;
+  }
+}
+
+.errorPage__link {
+  position: absolute;
+  bottom: 60px;
+  text-decoration: none;
+  color: #4285f4;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 800px) {
+  .errorPage__link {
+    bottom: 222px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .errorPage__link {
+    font-size: 12px;
+    line-height: 14px;
+    bottom: 30px;
+  }
+}

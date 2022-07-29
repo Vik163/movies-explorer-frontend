@@ -68,6 +68,7 @@
   background-repeat: no-repeat;
   background-position: center;
   border: none;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 779px) {

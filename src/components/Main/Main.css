@@ -1,0 +1,9 @@
+.main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.main__promo {
+  margin-top: 20px;
+}

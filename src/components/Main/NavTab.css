@@ -1,0 +1,19 @@
+.navTab {
+}
+
+.navTab__button {
+  background-color: #303030;
+  color: white;
+  width: 96px;
+  height: 36px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  border-radius: 10px;
+  border-style: none;
+  margin-right: 10px;
+}
+
+.navTab__button:last-child {
+  margin: 0;
+}

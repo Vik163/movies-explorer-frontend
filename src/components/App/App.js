@@ -3,11 +3,13 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 
 import './App.css';
 
-import Login from '../Login.js';
-import Register from '../Register/Register.js';
+import Login from '../Register-Login/Login.js';
+import Register from '../Register-Login/Register.js';
+import Profile from '../Profile/Profile.js';
+import ErrorPage from '../ErrorPage/ErrorPage.js';
 import Header from '../Header/Header.js';
 import Footer from '../Footer/Footer.js';
-import Main from '../Main.js';
+import Main from '../Main/Main.js';
 import AddPlacePopup from '../AddPlacePopup.js';
 import PopupWithForm from '../PopupWithForm.js';
 import ImagePopup from '../ImagePopup.js';
@@ -247,7 +249,19 @@ function App() {
           <Route path='/sign-in'>
             <Login handleLogin={handleLogin} />
           </Route>
+          <Route path='/error'>
+            <ErrorPage handleLogin={handleLogin} />
+          </Route>
           {/* <ProtectedRoute exact path="/" loggedIn={loggedIn}> */}
+          <Route path='/profile'>
+            <Header
+              loggedIn={loggedIn}
+              infoLink='Главная'
+              signOut={signOut}
+              link='/sign-in'
+            />
+            <Profile handleLogin={handleLogin} />
+          </Route>
           <Route path='/main'>
             {/* временно */}
 
