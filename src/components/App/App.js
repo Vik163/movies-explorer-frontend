@@ -283,40 +283,6 @@ function App() {
             <Footer />
           </Route>{' '}
           {/* временно */}
-          <section className='popups' tabIndex='0'>
-            <EditAvatarPopup
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}
-              onUpdateAvatar={handleUpdateAvatar}
-              text={valueSubmit}
-            />
-            <EditProfilePopup
-              isOpen={isEditProfilePopupOpen}
-              onClose={closeAllPopups}
-              onUpdateUser={handleUpdateUser}
-              text={valueSubmit}
-            />
-            <AddPlacePopup
-              isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopups}
-              onAddPlace={handleAddPlaceSubmit}
-              text={valueSubmit}
-            />
-
-            <PopupWithForm
-              name='delete-card'
-              title='Вы уверены?'
-              text={valueSubmitDeleteCard}
-              isOpen={isAddConfirmPopupOpen}
-              onClose={closeAllPopups}
-              onSubmit={handleCardDelete}
-            ></PopupWithForm>
-            <ImagePopup
-              name='image'
-              card={selectedCard}
-              onClose={closeAllPopups}
-            />
-          </section>
           {/* </ProtectedRoute> */}
         </Switch>
       </div>

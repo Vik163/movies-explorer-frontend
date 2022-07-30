@@ -9,7 +9,7 @@ function Footer() {
       <div className='footer__info'>
         <p className='footer__date'>&copy; {new Date().getFullYear()}</p>
         <ul className='footer__navbar'>
-          <li className='footer__navbar-item'>
+          <li className='footer__navbar-item button-hover'>
             <a
               className='footer__link'
               href='https://practicum.yandex.ru/'
@@ -19,7 +19,7 @@ function Footer() {
               Яндекс.Практикум
             </a>
           </li>
-          <li className='footer__navbar-item'>
+          <li className='footer__navbar-item button-hover'>
             <a
               className='footer__link'
               href='https://github.com/'
@@ -29,7 +29,7 @@ function Footer() {
               Github
             </a>
           </li>
-          <li className='footer__navbar-item'>
+          <li className='footer__navbar-item button-hover'>
             <a
               className='footer__link'
               href='https://vk.com/'
