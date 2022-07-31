@@ -10,11 +10,7 @@ import ErrorPage from '../ErrorPage/ErrorPage.js';
 import Header from '../Header/Header.js';
 import Footer from '../Footer/Footer.js';
 import Main from '../Main/Main.js';
-import AddPlacePopup from '../AddPlacePopup.js';
-import PopupWithForm from '../PopupWithForm.js';
-import ImagePopup from '../ImagePopup.js';
-import EditProfilePopup from '../EditProfilePopup.js';
-import EditAvatarPopup from '../EditAvatarPopup.js';
+import Movies from '../Movies/Movies';
 import ProtectedRoute from '../ProtectedRoute';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { api } from '../../utils/api.js';
@@ -29,11 +25,7 @@ function App() {
   });
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isSign, setIsSign] = useState(false);
-  const [isAddConfirmPopupOpen, setIsAddConfirmPopupOpen] = useState(false);
   const [valueSubmit, setValueSubmit] = useState('Сохранить');
   const [valueSubmitDeleteCard, setValueSubmitDeleteCard] = useState('Да');
   const [selectedCard, setSelectedCard] = useState({});
@@ -134,7 +126,6 @@ function App() {
       .addCard(obj)
       .then((newCard) => {
         setCards([newCard, ...cards]);
-        closeAllPopups();
         clearInput();
       })
       .catch((err) => {
@@ -153,7 +144,6 @@ function App() {
       .deleteCard(cardDelete)
       .then(() => {
         setCards((state) => state.filter((c) => !(c._id === cardDelete._id)));
-        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
@@ -164,7 +154,6 @@ function App() {
   }
 
   function onConfirmDelete(card) {
-    setIsAddConfirmPopupOpen(true);
     setCardDelete(card);
   }
 
@@ -175,7 +164,6 @@ function App() {
       .sendInfoProfile(obj)
       .then((result) => {
         setCurrentUser(result);
-        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
@@ -209,7 +197,6 @@ function App() {
       .addAvatar(avatar)
       .then((result) => {
         setCurrentUser(result);
-        closeAllPopups();
         clearInput();
       })
       .catch((err) => {
@@ -218,25 +205,6 @@ function App() {
       .finally(() => {
         setValueSubmit('Сохранить');
       });
-  }
-
-  function handleEditAvatarClick() {
-    setIsEditAvatarPopupOpen(true);
-  }
-
-  function handleEditProfileClick() {
-    setIsEditProfilePopupOpen(true);
-  }
-  function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(true);
-  }
-
-  function closeAllPopups() {
-    setIsEditAvatarPopupOpen(false);
-    setIsEditProfilePopupOpen(false);
-    setIsAddPlacePopupOpen(false);
-    setSelectedCard({});
-    setIsAddConfirmPopupOpen(false);
   }
 
   return (
@@ -269,19 +237,21 @@ function App() {
               loggedIn={loggedIn}
               infoLink='Главная'
               signOut={signOut}
-              link='/sign-in'
+              // link='/sign-in'
             />
-            <Main
-              onEditAvatar={handleEditAvatarClick}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onImagePopup={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={onConfirmDelete}
-              cards={cards}
-            />
+            <Main loggedIn={loggedIn} infoLink='Главная' signOut={signOut} />
             <Footer />
-          </Route>{' '}
+          </Route>
+          <Route path='/movies'>
+            <Header
+              loggedIn={loggedIn}
+              infoLink='Главная'
+              signOut={signOut}
+              // link='/sign-in'
+            />
+            <Movies onCardLike={handleCardLike} cards={cards} />
+            <Footer />
+          </Route>
           {/* временно */}
           {/* </ProtectedRoute> */}
         </Switch>

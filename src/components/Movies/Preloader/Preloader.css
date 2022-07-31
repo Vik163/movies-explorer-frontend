@@ -1,0 +1,48 @@
+.preloader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto 0;
+  width: 50%;
+}
+
+@media screen and (max-width: 900px) {
+  .preloader {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .preloader {
+    width: 288px;
+  }
+}
+
+.preloader__notFind {
+  color: #fff;
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 400;
+}
+
+@media screen and (max-width: 600px) {
+  .preloader__notFind {
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+.preloader__error {
+  color: #ee3465;
+  text-align: center;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+@media screen and (max-width: 600px) {
+  .preloader__error {
+    font-size: 12px;
+    line-height: 16px;
+  }
+}

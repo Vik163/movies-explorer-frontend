@@ -1,9 +1,0 @@
-.popup__label_type_profile-avatar {
-  margin-bottom: 48px;
-}
-
-@media screen and (max-width: 600px) {
-  .popup__label_type_profile-avatar {
-    margin-bottom: 45px;
-  }
-}

@@ -1,0 +1,24 @@
+.moviesCardList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 89%;
+}
+
+.moviesCardList__button-else {
+  width: 320px;
+  height: 36px;
+  background-color: #2f2f2f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 600px) {
+  .moviesCardList__button-else {
+    width: 240px;
+  }
+}
