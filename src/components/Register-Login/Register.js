@@ -77,6 +77,10 @@ function Register(props) {
           Зарегистрироваться
         </button>
       </form>
+      <span className='register__error'>
+        {/* {props.errorMessage} */}
+        При регистрации пользователя произошла ошибка.
+      </span>
       <div className='register__caption'>
         <span>Уже зарегистрированы?</span>
         <Link className='register__caption-link button-hover' to='/sign-in'>

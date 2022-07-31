@@ -3,9 +3,21 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 700px;
   color: white;
   position: relative;
+}
+
+@media screen and (max-width: 900px) {
+  .errorPage {
+    height: 1024px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .errorPage {
+    height: 780px;
+  }
 }
 
 .errorPage__status {

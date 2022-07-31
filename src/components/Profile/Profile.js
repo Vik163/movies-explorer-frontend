@@ -24,28 +24,24 @@ function Profile(props) {
   //   }));
   // };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (!infoAuth.email || !infoAuth.password) {
-  //     return;
-  //   }
-  //   props.handleProfile(infoAuth);
-  //   setInfoAuth({ email: '', password: '' });
-  // };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // if (!infoAuth.email || !infoAuth.password) {
+    //   return;
+    // }
+    // props.handleProfile(infoAuth);
+    // setInfoAuth({ email: '', password: '' });
+  };
 
   const toggle = () => {
     setIsToggle(!isToggle);
   };
-  console.log(isToggle);
 
   return (
     <div className='profile'>
       <h2 className='profile__title'>Привет, Виталий!</h2>
 
-      <form
-        className='profile__form'
-        // onSubmit={handleSubmit}
-      >
+      <form className='profile__form' onSubmit={handleSubmit}>
         <label className='profile__label'>
           <span className='profile__input-title'>Имя</span>
           <input
@@ -82,6 +78,10 @@ function Profile(props) {
           Сохранить
         </button>
       </form>
+      <span className='profile__error'>
+        {/* {props.errorMessage} */}
+        При обновлении профиля произошла ошибка.
+      </span>
       <div
         className='profile__edit-container'
         style={{ display: isToggle && 'none' }}

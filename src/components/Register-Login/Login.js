@@ -70,6 +70,11 @@ function Login(props) {
           Войти
         </button>
       </form>
+      <span className='register__error'>
+        {/* {props.errorMessage} */}
+        При авторизации произошла ошибка. Токен не передан или передан не в том
+        формате.
+      </span>
       <div className='register__caption'>
         <span>Ещё не зарегистрированы?</span>
         <Link className='register__caption-link button-hover' to='/sign-in'>

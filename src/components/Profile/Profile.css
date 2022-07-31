@@ -1,4 +1,5 @@
 .profile {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,13 +19,20 @@
   font-size: 24px;
   line-height: 29px;
   font-weight: 500;
-  margin: 74px 0 226px;
+  margin: 74px 0 126px;
+}
+
+@media screen and (max-width: 900px) {
+  .profile__title {
+    align-self: center;
+    margin: 235px 0 100px;
+  }
 }
 
 @media screen and (max-width: 600px) {
   .profile__title {
     align-self: center;
-    margin: 50px 0 80px;
+    margin: 70px 0 80px;
   }
 }
 
@@ -135,11 +143,15 @@
   margin-top: 220px;
 }
 
+@media screen and (max-width: 900px) {
+  .profile__edit-container {
+    margin-top: 205px;
+  }
+}
+
 @media screen and (max-width: 600px) {
-  .profile__caption {
-    font-size: 12px;
-    line-height: 14px;
-    margin-top: 14px;
+  .profile__edit-container {
+    margin-top: 380px;
   }
 }
 
@@ -159,5 +171,14 @@
   font-size: 13px;
   line-height: 16px;
   font-weight: 500;
+  color: #ee3465;
+}
+
+.profile__error {
+  position: absolute;
+  bottom: 65px;
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: 400;
   color: #ee3465;
 }
