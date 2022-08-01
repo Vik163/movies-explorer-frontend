@@ -1,7 +1,19 @@
 .searchForm {
-  width: 93%;
+  width: 89%;
   display: flex;
   flex-wrap: wrap;
+}
+
+@media screen and (max-width: 900px) {
+  .searchForm {
+    width: 92%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .searchForm {
+    width: 292px;
+  }
 }
 
 .searchForm__form {
@@ -59,6 +71,7 @@
   background-position: right;
   background-size: 34px;
   border: none;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 600px) {

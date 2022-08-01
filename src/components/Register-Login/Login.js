@@ -34,15 +34,18 @@ function Login(props) {
 
       <h2 className='register__title'>Рады видеть!</h2>
 
-      <form className='register__form' onSubmit={handleSubmit}>
+      <form
+        className='register__form'
+        // onSubmit={handleSubmit}
+      >
         <label className='register__label'>
           <span className='register__input-title'>E-mail</span>
           <input
             className='register__input register__input_type_email'
             id='email'
             type='email'
-            onChange={handleChange}
-            value={infoAuth.email ?? ''}
+            // onChange={handleChange}
+            // value={infoAuth.email ?? ''}
             placeholder='Email'
             name='email'
             required
@@ -55,8 +58,8 @@ function Login(props) {
             className='register__input register__input_type_password'
             id='password'
             type='password'
-            onChange={handleChange}
-            value={infoAuth.password ?? ''}
+            // onChange={handleChange}
+            // value={infoAuth.password ?? ''}
             placeholder='Пароль'
             name='password'
             required

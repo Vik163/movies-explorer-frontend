@@ -1,61 +1,65 @@
-// import React from 'react';
-// import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
+import React from 'react';
 
-// function MoviesCard(props) {
-//   const { card, onImagePopup, onCardLike, onCardDelete } = props;
+import './MoviesCard.css';
 
-//   const currentUser = React.useContext(CurrentUserContext);
+import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 
-//   // const isOwn = card.owner === currentUser._id;
-//   const cardDeleteButtonClassName = `card__basket button-hover ${
-//     !'isOwn' && 'card__basket_hidden'
-//   }`;
+function MoviesCard(props) {
+  const { card, key, onCardLike, onCardDelete } = props;
 
-//   // const isLiked = card.likes.some((i) => i === currentUser._id);
-//   const cardLikeButtonClassName = `card__icon ${
-//     'isLiked' && 'card__icon_active'
-//   }`;
+  // const currentUser = React.useContext(CurrentUserContext);
 
-//   function handleClick() {
-//     onImagePopup(card);
-//   }
+  // const isOwn = card.owner === currentUser._id;
+  // const cardDeleteButtonClassName = `card__basket button-hover ${
+  //   !'isOwn' && 'card__basket_hidden'
+  // }`;
 
-//   function handleLikeClick() {
-//     onCardLike(card);
-//   }
+  // const isLiked = card.likes.some((i) => i === currentUser._id);
+  const isLiked = false;
+  const cardLikeButtonClassName = `moviesCard__icon button-hover ${
+    isLiked && 'moviesCard__icon_active'
+  }`;
 
-//   function handleDeleteClick() {
-//     onCardDelete(card);
-//   }
+  const getTime = (min) => {
+    const hours = Math.trunc(min / 60);
+    const minutes = min % 60;
+    return hours + 'ч ' + minutes + 'м';
+  };
 
-//   return (
-//     <li className='card'>
-//       <img
-//         className='card__image'
-//         // src={card.link}
-//         // alt={card.name}
-//         onClick={handleClick}
-//       />
-//       <button
-//         className={cardDeleteButtonClassName}
-//         type='button'
-//         aria-label='basket'
-//         onClick={handleDeleteClick}
-//       ></button>
-//       <div className='card__info'>
-//         <h2 className='card__title'>{'card.name'}</h2>
-//         <div className='card__likes-info'>
-//           <button
-//             className={cardLikeButtonClassName}
-//             type='button'
-//             onClick={handleLikeClick}
-//             aria-label='like'
-//           ></button>
-//           <p className='card__likes-num'>{'card.likes.length'}</p>
-//         </div>
-//       </div>
-//     </li>
-//   );
-// }
+  // function handleClick() {
+  //   onImagePopup(card);
+  // }
 
-// export default MoviesCard;
+  // function handleLikeClick() {
+  //   onCardLike(card);
+  // }
+
+  // function handleDeleteClick() {
+  //   onCardDelete(card);
+  // }
+
+  return (
+    <li className='moviesCard'>
+      <a href={props.card.trailerLink}>
+        <img
+          className='moviesCard__image button-hover'
+          src={`https://api.nomoreparties.co/${card.image.url}`}
+          alt={card.nameRU}
+          // onClick={handleClick}
+        />
+      </a>
+      <div className='moviesCard__info'>
+        <h2 className='moviesCard__title'>{card.nameRU}</h2>
+        <button
+          className={cardLikeButtonClassName}
+          type='button'
+          // onClick={handleLikeClick}
+          aria-label='like'
+        ></button>
+      </div>
+      <p className='moviesCard__duration'>{getTime(card.duration)}</p>
+    </li>
+  );
+}
+
+export default MoviesCard;

@@ -32,203 +32,215 @@ function App() {
   const [cardDelete, setCardDelete] = useState({});
   const [cards, setCards] = useState([]);
 
-  const checkToken = () => {
-    const jwt = localStorage.getItem('jwt');
+  // const checkToken = () => {
+  //   const jwt = localStorage.getItem('jwt');
 
-    if (jwt) {
-      auth
-        .checkToken(jwt)
-        .then((res) => {
-          if (res) {
-            setLogInfo({
-              id: res._id,
-              email: res.email,
-            });
-            setLoggedIn(true);
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-  };
+  //   if (jwt) {
+  //     auth
+  //       .checkToken(jwt)
+  //       .then((res) => {
+  //         if (res) {
+  //           setLogInfo({
+  //             id: res._id,
+  //             email: res.email,
+  //           });
+  //           setLoggedIn(true);
+  //         }
+  //       })
+  //       .catch((err) => console.log(err));
+  //   }
+  // };
 
-  useEffect(() => {
-    checkToken();
-  }, []);
+  // useEffect(() => {
+  //   checkToken();
+  // }, []);
 
-  useEffect(() => {
-    if (loggedIn) {
-      history.push('/');
-    }
-  }, [loggedIn]);
+  // useEffect(() => {
+  //   if (loggedIn) {
+  //     history.push('/');
+  //   }
+  // }, [loggedIn]);
 
-  useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
-
-    if (jwt) {
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
-        .then(([userData, cards]) => {
-          setCurrentUser(userData);
+  useEffect(
+    () => {
+      api
+        .getInitialCards()
+        .then((cards) => {
           setCards(cards);
         })
         .catch((err) => {
           console.log(err);
         });
-    }
-  }, []);
+    },
+    // const jwt = localStorage.getItem('jwt');
 
-  function handleRegister({ password, email }) {
-    return auth
-      .registration(password, email)
-      .then((res) => {
-        if (res) {
-          setIsSign(true);
+    // if (jwt) {
+    //   Promise.all([api.getUserInfo(), api.getInitialCards()])
+    //     .then(([userData, cards]) => {
+    //       setCurrentUser(userData);
+    //       setCards(cards);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
+    // },
+    []
+  );
 
-          history.push('/sign-in');
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsSign(false);
-      })
-      .finally(() => {});
-  }
+  // function handleRegister({ password, email }) {
+  //   return auth
+  //     .registration(password, email)
+  //     .then((res) => {
+  //       if (res) {
+  //         setIsSign(true);
 
-  function handleLogin({ password, email }) {
-    return auth
-      .authorization(password, email)
-      .then((data) => {
-        if (data.token) {
-          localStorage.setItem('jwt', data.token);
-          checkToken();
-          setCurrentUser(data.user);
-          api.getInitialCards().then((cards) => {
-            setCards(cards);
-          });
-          history.push('/');
-        }
-      })
-      .catch((err) => console.log(err));
-  }
+  //         history.push('/sign-in');
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       setIsSign(false);
+  //     })
+  //     .finally(() => {});
+  // }
 
-  function signOut() {
-    localStorage.removeItem('jwt');
-    setLoggedIn(false);
-    setLogInfo({
-      id: null,
-      email: null,
-    });
-    history.push('/sign-in');
-  }
+  // function handleLogin({ password, email }) {
+  //   return auth
+  //     .authorization(password, email)
+  //     .then((data) => {
+  //       if (data.token) {
+  //         localStorage.setItem('jwt', data.token);
+  //         checkToken();
+  //         setCurrentUser(data.user);
+  //         api.getInitialCards().then((cards) => {
+  //           setCards(cards);
+  //         });
+  //         history.push('/');
+  //       }
+  //     })
+  //     .catch((err) => console.log(err));
+  // }
 
-  function handleAddPlaceSubmit(obj, clearInput) {
-    setValueSubmit('Сохранение...');
-    api
-      .addCard(obj)
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
-        clearInput();
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setValueSubmit('Сохранить');
-      });
-  }
+  // function signOut() {
+  //   localStorage.removeItem('jwt');
+  //   setLoggedIn(false);
+  //   setLogInfo({
+  //     id: null,
+  //     email: null,
+  //   });
+  //   history.push('/sign-in');
+  // }
 
-  function handleCardDelete(e) {
-    e.preventDefault();
+  // function handleAddPlaceSubmit(obj, clearInput) {
+  //   setValueSubmit('Сохранение...');
+  //   api
+  //     .addCard(obj)
+  //     .then((newCard) => {
+  //       setCards([newCard, ...cards]);
+  //       clearInput();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  //     .finally(() => {
+  //       setValueSubmit('Сохранить');
+  //     });
+  // }
 
-    setValueSubmitDeleteCard('Сохранение...');
-    api
-      .deleteCard(cardDelete)
-      .then(() => {
-        setCards((state) => state.filter((c) => !(c._id === cardDelete._id)));
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setValueSubmitDeleteCard('Да');
-      });
-  }
+  // function handleCardDelete(e) {
+  //   e.preventDefault();
 
-  function onConfirmDelete(card) {
-    setCardDelete(card);
-  }
+  //   setValueSubmitDeleteCard('Сохранение...');
+  //   api
+  //     .deleteCard(cardDelete)
+  //     .then(() => {
+  //       setCards((state) => state.filter((c) => !(c._id === cardDelete._id)));
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  //     .finally(() => {
+  //       setValueSubmitDeleteCard('Да');
+  //     });
+  // }
 
-  function handleUpdateUser(obj) {
-    setValueSubmit('Сохранение...');
+  // function onConfirmDelete(card) {
+  //   setCardDelete(card);
+  // }
 
-    api
-      .sendInfoProfile(obj)
-      .then((result) => {
-        setCurrentUser(result);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setValueSubmit('Сохранить');
-      });
-  }
+  // function handleUpdateUser(obj) {
+  //   setValueSubmit('Сохранение...');
 
-  function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i === currentUser._id);
-    const action = isLiked ? api.deleteLike(card) : api.addLikes(card);
-    action
-      .then((result) => {
-        setCards((state) =>
-          state.map((c) => (c._id === card._id ? result : c))
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  //   api
+  //     .sendInfoProfile(obj)
+  //     .then((result) => {
+  //       setCurrentUser(result);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  //     .finally(() => {
+  //       setValueSubmit('Сохранить');
+  //     });
+  // }
 
-  function handleCardClick(card) {
-    setSelectedCard(card);
-  }
+  // function handleCardLike(card) {
+  //   const isLiked = card.likes.some((i) => i === currentUser._id);
+  //   const action = isLiked ? api.deleteLike(card) : api.addLikes(card);
+  //   action
+  //     .then((result) => {
+  //       setCards((state) =>
+  //         state.map((c) => (c._id === card._id ? result : c))
+  //       );
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
 
-  function handleUpdateAvatar(avatar, clearInput) {
-    setValueSubmit('Сохранение...');
-    api
-      .addAvatar(avatar)
-      .then((result) => {
-        setCurrentUser(result);
-        clearInput();
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setValueSubmit('Сохранить');
-      });
-  }
+  // function handleCardClick(card) {
+  //   setSelectedCard(card);
+  // }
+
+  // function handleUpdateAvatar(avatar, clearInput) {
+  //   setValueSubmit('Сохранение...');
+  //   api
+  //     .addAvatar(avatar)
+  //     .then((result) => {
+  //       setCurrentUser(result);
+  //       clearInput();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  //     .finally(() => {
+  //       setValueSubmit('Сохранить');
+  //     });
+  // }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
         <Switch>
           <Route path='/sign-up'>
-            <Register handleRegister={handleRegister} />
+            <Register />
           </Route>
           <Route path='/sign-in'>
-            <Login handleLogin={handleLogin} />
+            <Login />
           </Route>
           <Route path='/error'>
-            <ErrorPage handleLogin={handleLogin} />
+            <ErrorPage />
           </Route>
           {/* <ProtectedRoute exact path="/" loggedIn={loggedIn}> */}
           <Route path='/profile'>
             <Header
               loggedIn={loggedIn}
               infoLink='Главная'
-              signOut={signOut}
+              // signOut={signOut}
               link='/sign-in'
             />
-            <Profile handleLogin={handleLogin} />
+            <Profile />
           </Route>
           <Route path='/main'>
             {/* временно */}
@@ -236,20 +248,20 @@ function App() {
             <Header
               loggedIn={loggedIn}
               infoLink='Главная'
-              signOut={signOut}
+              // signOut={signOut}
               // link='/sign-in'
             />
-            <Main loggedIn={loggedIn} infoLink='Главная' signOut={signOut} />
+            <Main loggedIn={loggedIn} infoLink='Главная' />
             <Footer />
           </Route>
           <Route path='/movies'>
             <Header
               loggedIn={loggedIn}
               infoLink='Главная'
-              signOut={signOut}
+              // signOut={signOut}
               // link='/sign-in'
             />
-            <Movies onCardLike={handleCardLike} cards={cards} />
+            <Movies cards={cards} />
             <Footer />
           </Route>
           {/* временно */}

@@ -16,3 +16,7 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
+
+.button-hover:hover {
+  opacity: 0.8;
+}

@@ -41,7 +41,10 @@ function Profile(props) {
     <div className='profile'>
       <h2 className='profile__title'>Привет, Виталий!</h2>
 
-      <form className='profile__form' onSubmit={handleSubmit}>
+      <form
+        className='profile__form'
+        // onSubmit={handleSubmit}
+      >
         <label className='profile__label'>
           <span className='profile__input-title'>Имя</span>
           <input

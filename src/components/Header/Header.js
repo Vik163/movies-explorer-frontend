@@ -40,8 +40,8 @@ function Header(props) {
     <div className='header__register-container'>
       <Link
         className='header__register button-hover'
-        onClick={props.signOut}
-        to={props.link}
+        // onClick={props.signOut}
+        // to={props.link}
       >
         Регистрация
       </Link>
@@ -49,7 +49,7 @@ function Header(props) {
         className='header__in button-hover'
         aria-label='in'
         type='button'
-        onClick={''}
+        // onClick={''}
       >
         Войти
       </button>

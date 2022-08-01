@@ -1,16 +1,2 @@
 @import url(vendor/normalize.css);
 @import url(vendor/fonts/inter.css);
-
-@import url(blocks/button-hover/button-hover.css);
-
-@import url(blocks/card/card.css);
-@import url(blocks/card/__title/card__title.css);
-@import url(blocks/card/__info/card__info.css);
-@import url(blocks/card/__image/card__image.css);
-@import url(blocks/card/__likes-info/card__likes-info.css);
-@import url(blocks/card/__likes-num/card__likes-num.css);
-@import url(blocks/card/__icon/card__icon.css);
-@import url(blocks/card/__icon/_active/card__icon_active.css);
-
-@import url(blocks/cards/__container/cards__container.css);
-@import url(blocks/cards/cards.css);
