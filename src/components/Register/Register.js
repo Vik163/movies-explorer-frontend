@@ -1,51 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import './Register.css';
 
 import registerLogo from '../../images/logo.svg';
 
-function Login(props) {
-  const [infoAuth, setInfoAuth] = useState({
-    email: '',
-    password: '',
-  });
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setInfoAuth((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
+function Register(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!infoAuth.email || !infoAuth.password) {
-      return;
-    }
-    props.handleLogin(infoAuth);
-    setInfoAuth({ email: '', password: '' });
   };
 
   return (
     <div className='register'>
-      <img className='register__logo' src={registerLogo} alt='Логотип' />
+      <Link className='register__logo button-hover' to='/'>
+        <img src={registerLogo} alt='Логотип' />
+      </Link>
 
-      <h2 className='register__title'>Рады видеть!</h2>
+      <h2 className='register__title'>Добро пожаловать!</h2>
 
-      <form
-        className='register__form'
-        // onSubmit={handleSubmit}
-      >
+      <form className='register__form' onSubmit={handleSubmit}>
+        <label className='register__label'>
+          <span className='register__input-title'>Имя</span>
+          <input
+            className='register__input register__input_type_name'
+            id='name'
+            type='text'
+            name='name'
+            required
+          />
+          <span className='register__input-error name-input-error'>Имя</span>
+        </label>
         <label className='register__label'>
           <span className='register__input-title'>E-mail</span>
           <input
             className='register__input register__input_type_email'
             id='email'
             type='email'
-            // onChange={handleChange}
-            // value={infoAuth.email ?? ''}
             placeholder='Email'
             name='email'
             required
@@ -58,34 +48,28 @@ function Login(props) {
             className='register__input register__input_type_password'
             id='password'
             type='password'
-            // onChange={handleChange}
-            // value={infoAuth.password ?? ''}
             placeholder='Пароль'
             name='password'
             required
           />
           <span className='register__input-error name-input-error'>Пароль</span>
         </label>
-        <button
-          className='register__submit register__submit-login button-hover'
-          type='submit'
-        >
-          Войти
+        <button className='register__submit button-hover' type='submit'>
+          Зарегистрироваться
         </button>
       </form>
       <span className='register__error'>
         {/* {props.errorMessage} */}
-        При авторизации произошла ошибка. Токен не передан или передан не в том
-        формате.
+        При регистрации пользователя произошла ошибка.
       </span>
       <div className='register__caption'>
-        <span>Ещё не зарегистрированы?</span>
+        <span>Уже зарегистрированы?</span>
         <Link className='register__caption-link button-hover' to='/sign-in'>
-          Регистрация
+          Войти
         </Link>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default Register;

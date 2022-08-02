@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import './Profile.css';
@@ -6,31 +6,13 @@ import './Profile.css';
 function Profile(props) {
   const [isToggle, setIsToggle] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  // const [infoAuth, setInfoAuth] = useState({
-  //   email: '',
-  //   password: '',
-  // });
 
   const submitDisabled = `profile__submit button-hover ${
     isDisabled && 'profile__submit_disabled'
   }`;
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-
-  //   setInfoAuth((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (!infoAuth.email || !infoAuth.password) {
-    //   return;
-    // }
-    // props.handleProfile(infoAuth);
-    // setInfoAuth({ email: '', password: '' });
   };
 
   const toggle = () => {
@@ -41,18 +23,13 @@ function Profile(props) {
     <div className='profile'>
       <h2 className='profile__title'>Привет, Виталий!</h2>
 
-      <form
-        className='profile__form'
-        // onSubmit={handleSubmit}
-      >
+      <form className='profile__form' onSubmit={handleSubmit}>
         <label className='profile__label'>
           <span className='profile__input-title'>Имя</span>
           <input
             className='profile__input profile__input_type_email'
             id='email'
             type='email'
-            // onChange={handleChange}
-            // value={infoAuth.email ?? ''}
             placeholder='Email'
             name='email'
             required
@@ -64,8 +41,6 @@ function Profile(props) {
             className='profile__input profile__input_type_password'
             id='password'
             type='password'
-            // onChange={handleChange}
-            // value={infoAuth.password ?? ''}
             placeholder='Пароль'
             name='password'
             required

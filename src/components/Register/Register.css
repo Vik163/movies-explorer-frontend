@@ -5,6 +5,7 @@
   align-items: center;
   align-self: center;
   width: 396px;
+  height: 1024px;
   color: white;
 }
 
@@ -143,12 +144,24 @@
 
 .register__error {
   position: absolute;
-  bottom: 98px;
+  top: 510px;
   text-align: center;
   font-size: 11px;
   line-height: 13px;
   font-weight: 400;
   color: #ee3465;
+}
+
+@media screen and (max-width: 928px) {
+  .register__error {
+    top: 670px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .register__error {
+    top: 630px;
+  }
 }
 
 .register__caption {

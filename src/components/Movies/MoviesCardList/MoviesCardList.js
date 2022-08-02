@@ -15,20 +15,12 @@ function MoviesCardList(props) {
 
   const [indexArray, setIndexArray] = useState(index);
 
-  const { onCardLike, onCardDelete, cards } = props;
+  const { cards } = props;
 
   const moviesCardList = (
     <ul className='moviesCardList__container'>
       {cards
-        .map((card) => (
-          <Card
-            card={card}
-            key={card._id}
-
-            // onCardLike={onCardLike}
-            // onCardDelete={onCardDelete}
-          />
-        ))
+        .map((card) => <Card card={card} key={card._id} isMobile={isMobile} />)
         .slice(0, indexArray)}
     </ul>
   );

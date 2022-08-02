@@ -3,221 +3,92 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 
 import './App.css';
 
-import Login from '../Register-Login/Login.js';
-import Register from '../Register-Login/Register.js';
+import Login from '../Login.js';
+import Register from '../Register/Register.js';
 import Profile from '../Profile/Profile.js';
 import ErrorPage from '../ErrorPage/ErrorPage.js';
 import Header from '../Header/Header.js';
 import Footer from '../Footer/Footer.js';
 import Main from '../Main/Main.js';
 import Movies from '../Movies/Movies';
-import ProtectedRoute from '../ProtectedRoute';
+import SavedMovies from '../SavedMovies';
+// import ProtectedRoute from '../ProtectedRoute';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { api } from '../../utils/api.js';
-import { auth } from '../../utils/auth.js';
+// import { auth } from '../../utils/auth.js';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
-  const history = useHistory();
-  const [logInfo, setLogInfo] = useState({
-    id: '',
-    email: '',
-  });
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const [isSign, setIsSign] = useState(false);
-  const [valueSubmit, setValueSubmit] = useState('Сохранить');
-  const [valueSubmitDeleteCard, setValueSubmitDeleteCard] = useState('Да');
-  const [selectedCard, setSelectedCard] = useState({});
-  const [cardDelete, setCardDelete] = useState({});
   const [cards, setCards] = useState([]);
-
-  // const checkToken = () => {
-  //   const jwt = localStorage.getItem('jwt');
-
-  //   if (jwt) {
-  //     auth
-  //       .checkToken(jwt)
-  //       .then((res) => {
-  //         if (res) {
-  //           setLogInfo({
-  //             id: res._id,
-  //             email: res.email,
-  //           });
-  //           setLoggedIn(true);
-  //         }
-  //       })
-  //       .catch((err) => console.log(err));
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   checkToken();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (loggedIn) {
-  //     history.push('/');
-  //   }
-  // }, [loggedIn]);
-
-  useEffect(
-    () => {
-      api
-        .getInitialCards()
-        .then((cards) => {
-          setCards(cards);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+  const [savedCards, setSavedCards] = useState([
+    {
+      id: 1,
+      nameRU: '«Роллинг Стоунз» в изгнании',
+      nameEN: 'Stones in Exile',
+      director: 'Стивен Кайак ',
+      country: 'США',
+      year: '2010',
+      duration: 61,
+      description:
+        'В конце 1960-х группа «Роллинг Стоунз», несмотря на все свои мегахиты и сверхуспешные концертные туры, была разорена. Виной всему — бездарный менеджмент и драконовское налогообложение в Британии. Тогда музыканты приняли не самое простое для себя решение: летом 1971 года после выхода альбома «Stiсky Fingers» они отправились на юг Франции записывать новую пластинку. Именно там, на Лазурном Берегу, в арендованном Китом Ричардсом подвале виллы Неллькот родился сборник «Exile on Main St.», который стал лучшим альбомом легендарной группы.',
+      trailerLink: 'https://www.youtube.com/watch?v=UXcqcdYABFw',
+      created_at: '2020-11-23T14:12:21.376Z',
+      updated_at: '2020-11-23T14:12:21.376Z',
+      image: {
+        id: 1,
+        name: 'stones-in-exile',
+        alternativeText: '',
+        caption: '',
+        width: 512,
+        height: 279,
+        formats: {
+          thumbnail: {
+            hash: 'thumbnail_stones_in_exile_b2f1b8f4b7',
+            ext: '.jpeg',
+            mime: 'image/jpeg',
+            width: 245,
+            height: 134,
+            size: 8.79,
+            path: null,
+            url: '/uploads/thumbnail_stones_in_exile_b2f1b8f4b7.jpeg',
+          },
+          small: {
+            hash: 'small_stones_in_exile_b2f1b8f4b7',
+            ext: '.jpeg',
+            mime: 'image/jpeg',
+            width: 500,
+            height: 272,
+            size: 25.68,
+            path: null,
+            url: '/uploads/small_stones_in_exile_b2f1b8f4b7.jpeg',
+          },
+        },
+        hash: 'stones_in_exile_b2f1b8f4b7',
+        ext: '.jpeg',
+        mime: 'image/jpeg',
+        size: 25.53,
+        url: '/uploads/stones_in_exile_b2f1b8f4b7.jpeg',
+        previewUrl: null,
+        provider: 'local',
+        provider_metadata: null,
+        created_at: '2020-11-23T14:11:57.313Z',
+        updated_at: '2020-11-23T14:11:57.313Z',
+      },
     },
-    // const jwt = localStorage.getItem('jwt');
+  ]);
 
-    // if (jwt) {
-    //   Promise.all([api.getUserInfo(), api.getInitialCards()])
-    //     .then(([userData, cards]) => {
-    //       setCurrentUser(userData);
-    //       setCards(cards);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
-    // },
-    []
-  );
-
-  // function handleRegister({ password, email }) {
-  //   return auth
-  //     .registration(password, email)
-  //     .then((res) => {
-  //       if (res) {
-  //         setIsSign(true);
-
-  //         history.push('/sign-in');
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       setIsSign(false);
-  //     })
-  //     .finally(() => {});
-  // }
-
-  // function handleLogin({ password, email }) {
-  //   return auth
-  //     .authorization(password, email)
-  //     .then((data) => {
-  //       if (data.token) {
-  //         localStorage.setItem('jwt', data.token);
-  //         checkToken();
-  //         setCurrentUser(data.user);
-  //         api.getInitialCards().then((cards) => {
-  //           setCards(cards);
-  //         });
-  //         history.push('/');
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // }
-
-  // function signOut() {
-  //   localStorage.removeItem('jwt');
-  //   setLoggedIn(false);
-  //   setLogInfo({
-  //     id: null,
-  //     email: null,
-  //   });
-  //   history.push('/sign-in');
-  // }
-
-  // function handleAddPlaceSubmit(obj, clearInput) {
-  //   setValueSubmit('Сохранение...');
-  //   api
-  //     .addCard(obj)
-  //     .then((newCard) => {
-  //       setCards([newCard, ...cards]);
-  //       clearInput();
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  //     .finally(() => {
-  //       setValueSubmit('Сохранить');
-  //     });
-  // }
-
-  // function handleCardDelete(e) {
-  //   e.preventDefault();
-
-  //   setValueSubmitDeleteCard('Сохранение...');
-  //   api
-  //     .deleteCard(cardDelete)
-  //     .then(() => {
-  //       setCards((state) => state.filter((c) => !(c._id === cardDelete._id)));
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  //     .finally(() => {
-  //       setValueSubmitDeleteCard('Да');
-  //     });
-  // }
-
-  // function onConfirmDelete(card) {
-  //   setCardDelete(card);
-  // }
-
-  // function handleUpdateUser(obj) {
-  //   setValueSubmit('Сохранение...');
-
-  //   api
-  //     .sendInfoProfile(obj)
-  //     .then((result) => {
-  //       setCurrentUser(result);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  //     .finally(() => {
-  //       setValueSubmit('Сохранить');
-  //     });
-  // }
-
-  // function handleCardLike(card) {
-  //   const isLiked = card.likes.some((i) => i === currentUser._id);
-  //   const action = isLiked ? api.deleteLike(card) : api.addLikes(card);
-  //   action
-  //     .then((result) => {
-  //       setCards((state) =>
-  //         state.map((c) => (c._id === card._id ? result : c))
-  //       );
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
-
-  // function handleCardClick(card) {
-  //   setSelectedCard(card);
-  // }
-
-  // function handleUpdateAvatar(avatar, clearInput) {
-  //   setValueSubmit('Сохранение...');
-  //   api
-  //     .addAvatar(avatar)
-  //     .then((result) => {
-  //       setCurrentUser(result);
-  //       clearInput();
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  //     .finally(() => {
-  //       setValueSubmit('Сохранить');
-  //     });
-  // }
+  useEffect(() => {
+    api
+      .getInitialCards()
+      .then((cards) => {
+        setCards(cards);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -234,37 +105,24 @@ function App() {
           </Route>
           {/* <ProtectedRoute exact path="/" loggedIn={loggedIn}> */}
           <Route path='/profile'>
-            <Header
-              loggedIn={loggedIn}
-              infoLink='Главная'
-              // signOut={signOut}
-              link='/sign-in'
-            />
+            <Header loggedIn={loggedIn} />
             <Profile />
           </Route>
-          <Route path='/main'>
-            {/* временно */}
-
-            <Header
-              loggedIn={loggedIn}
-              infoLink='Главная'
-              // signOut={signOut}
-              // link='/sign-in'
-            />
+          <Route exact path='/'>
+            <Header loggedIn={loggedIn} />
             <Main loggedIn={loggedIn} infoLink='Главная' />
             <Footer />
           </Route>
           <Route path='/movies'>
-            <Header
-              loggedIn={loggedIn}
-              infoLink='Главная'
-              // signOut={signOut}
-              // link='/sign-in'
-            />
+            <Header loggedIn={loggedIn} />
             <Movies cards={cards} />
             <Footer />
           </Route>
-          {/* временно */}
+          <Route path='/saved-movies'>
+            <Header loggedIn={loggedIn} />
+            <SavedMovies savedCards={savedCards} />
+            <Footer />
+          </Route>
           {/* </ProtectedRoute> */}
         </Switch>
       </div>

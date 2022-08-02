@@ -4,17 +4,16 @@ import './SearchForm.css';
 import './FilterCheckbox.css';
 
 function SearchForm() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <section className='searchForm'>
-      <form
-        className='searchForm__form'
-        // onSubmit={'handleSubmit'}
-      >
+      <form className='searchForm__form' onSubmit={handleSubmit}>
         <input
           className='searchForm__input searchForm__input_type_email'
           type='text'
-          // onChange={handleChange}
-          // value={infoAuth.email ?? ''}
           placeholder='Фильм'
           name='film'
           required
@@ -22,7 +21,6 @@ function SearchForm() {
         <button
           className='searchForm__submit button-hover'
           type='submit'
-          // onClick={toggle}
         ></button>
       </form>
       <div className='searchForm__checkbox-container button-hover'>

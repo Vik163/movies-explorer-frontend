@@ -176,9 +176,24 @@
 
 .profile__error {
   position: absolute;
-  bottom: 65px;
+  top: 480px;
+  text-align: center;
   font-size: 11px;
   line-height: 13px;
   font-weight: 400;
   color: #ee3465;
+}
+
+@media screen and (max-width: 900px) {
+  .profile__error {
+    top: 610px;
+    width: 260px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .profile__error {
+    top: 430px;
+    width: 260px;
+  }
 }

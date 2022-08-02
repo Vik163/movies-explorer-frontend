@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import Navigation from '../Navigation/Navigation';
 import './Header.css';
 
 import headerLogo from '../../images/logo.svg';
@@ -21,15 +22,13 @@ function Header(props) {
     <div className='header__navbar'>
       <Link
         className='header__link header__link_activ button-hover'
-        // onClick={props.signOut}
-        // to={props.link}
+        to='/movies'
       >
         Фильмы
       </Link>
       <Link
         className='header__link header__link_activ button-hover'
-        // onClick={props.signOut}
-        // to={props.link}
+        to='/saved-movies'
       >
         Сохранённые фильмы
       </Link>
@@ -38,21 +37,18 @@ function Header(props) {
 
   const headerRegister = (
     <div className='header__register-container'>
-      <Link
-        className='header__register button-hover'
-        // onClick={props.signOut}
-        // to={props.link}
-      >
+      <Link className='header__register button-hover' to='/sign-up'>
         Регистрация
       </Link>
-      <button
-        className='header__in button-hover'
-        aria-label='in'
-        type='button'
-        // onClick={''}
-      >
-        Войти
-      </button>
+      <Link className='button-hover' to='/sign-in'>
+        <button
+          className='header__in button-hover'
+          aria-label='in'
+          type='button'
+        >
+          Войти
+        </button>
+      </Link>
     </div>
   );
 
@@ -77,60 +73,29 @@ function Header(props) {
 
   return (
     <header className='header page__header'>
-      <img className='header__logo' src={headerLogo} alt='Логотип' />
+      <Link className='button-hover' to='/'>
+        <img className='header__logo' src={headerLogo} alt='Логотип' />
+      </Link>
       {props.loggedIn ? (
         <div>{headerRegister}</div>
       ) : isDesktop ? (
         <>
           <div>{headerInfo}</div>
-          <button
-            className='header__account button-hover'
-            aria-label='in'
-            type='button'
-            // onClick={''}
-          ></button>
+          <Link className='button-hover' to='/profile'>
+            <button
+              className='header__account'
+              aria-label='in'
+              type='button'
+              to='/profile'
+            ></button>
+          </Link>
         </>
       ) : (
-        <>
-          <div
-            className='header__menu-shadow'
-            style={{ display: isAddInfo.display }}
-          ></div>
-          {isAddInfo.src === closeIcon ? (
-            <div
-              className='header__menu'
-              style={{ display: isAddInfo.display }}
-            >
-              <Link
-                className='header__link header__link_activ button-hover'
-                // onClick={props.signOut}
-                // to={props.link}
-              >
-                Главная
-              </Link>
-              {headerInfo}
-              <button
-                className='header__account button-hover'
-                aria-label='in'
-                type='button'
-                // onClick={''}
-              ></button>
-              <img
-                className='header__icon header__icon-closeIcon button-hover'
-                onClick={toggle}
-                src={`${isAddInfo.src}`}
-                alt='Кнопка'
-              />
-            </div>
-          ) : (
-            <img
-              className='header__icon button-hover'
-              onClick={toggle}
-              src={`${isAddInfo.src}`}
-              alt='Кнопка'
-            />
-          )}
-        </>
+        <Navigation
+          isAddInfo={isAddInfo}
+          toggle={toggle}
+          headerInfo={headerInfo}
+        />
       )}
     </header>
   );
