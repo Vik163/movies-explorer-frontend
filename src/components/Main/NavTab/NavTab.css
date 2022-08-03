@@ -1,0 +1,43 @@
+.navTab {
+  position: absolute;
+  bottom: 30px;
+  display: flex;
+}
+
+@media screen and (max-width: 600px) {
+  .navTab {
+    bottom: 22px;
+  }
+}
+
+.navTab__link {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+  text-decoration: none;
+  background-color: #303030;
+  color: white;
+  width: 96px;
+  height: 36px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  border-radius: 10px;
+  border-style: none;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .navTab__link {
+    width: 82px;
+    height: 26px;
+    font-size: 10px;
+    line-height: 16px;
+  }
+}
+
+.navTab__link:last-child {
+  margin: 0;
+}

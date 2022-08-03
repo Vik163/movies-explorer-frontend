@@ -1,0 +1,139 @@
+.header {
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  width: 89%;
+  height: 74px;
+  color: white;
+}
+
+@media screen and (max-width: 928px) {
+  .header {
+    width: 92%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    width: 292px;
+  }
+}
+
+.header__logo {
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+}
+
+.header__navbar {
+  margin-left: 60px;
+}
+@media screen and (max-width: 779px) {
+  .header__navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    margin-left: 0;
+  }
+}
+
+.header__register {
+  text-decoration: none;
+  color: white;
+  margin-right: 30px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 600px) {
+  .header__register {
+    margin-right: 14px;
+    font-size: 10px;
+  }
+}
+
+.header__in {
+  width: 76px;
+  height: 32px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: #3ddc84;
+  border: none;
+  border-radius: 3px;
+}
+
+@media screen and (max-width: 600px) {
+  .header__in {
+    width: 54px;
+    height: 26px;
+    font-size: 10px;
+  }
+}
+
+.header__account {
+  width: 100px;
+  height: 32px;
+  background: none;
+  background-image: url(../../images/profile.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 779px) {
+  .header__account {
+    position: absolute;
+    top: 902px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .header__account {
+    top: 702px;
+  }
+}
+
+.header__link {
+  text-decoration: none;
+  color: white;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  margin-right: 16px;
+}
+
+.header__link:last-child {
+  margin: 0;
+}
+
+@media screen and (max-width: 779px) {
+  .header__link {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 26px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .header__link {
+    margin: 0 0 20px;
+    padding-bottom: 7px;
+  }
+}
+
+.header__link:focus {
+  font-weight: 500;
+  opacity: 1;
+}
+
+@media screen and (max-width: 779px) {
+  .header__link:focus {
+    border-bottom: 2px solid white;
+  }
+}
