@@ -76,16 +76,12 @@
 }
 
 .register__input-error {
-  /* display: none; */
+  display: none;
   color: #ee3465;
   position: absolute;
   left: 0;
-  top: 50px;
+  top: 48px;
   z-index: 2;
-}
-
-.register__input-error_active {
-  display: block;
 }
 
 .register__input {
@@ -100,7 +96,7 @@
   line-height: 17px;
   font-weight: 400;
   outline: none;
-  margin: 5px 0 24px;
+  margin: 5px 0 32px;
 }
 
 .register__input:-webkit-autofill {
@@ -122,6 +118,12 @@
   border-radius: 3px;
   cursor: pointer;
   margin-top: 128px;
+}
+
+.register__submit:disabled {
+  background-color: #f8f8f8;
+  color: #c2c2c2;
+  cursor: default;
 }
 
 @media screen and (max-width: 600px) {

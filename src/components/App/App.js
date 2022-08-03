@@ -12,6 +12,7 @@ import Footer from '../Footer/Footer.js';
 import Main from '../Main/Main.js';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies';
+
 // import ProtectedRoute from '../ProtectedRoute';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { api } from '../../utils/api.js';
