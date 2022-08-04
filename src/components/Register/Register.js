@@ -7,9 +7,13 @@ import registerLogo from '../../images/logo.svg';
 
 function Register(props) {
   const [isName, setIsName] = useState('');
-  const [values, setValues] = React.useState({});
+  const [values, setValues] = React.useState({
+    name: '',
+    email: '',
+    password: '',
+  });
   const [errors, setErrors] = React.useState({});
-  const [formInValid, setFormInValid] = React.useState(true);
+  const [disabled, setDisabled] = React.useState(true);
   const [isInputsValid, setIsInputsValid] = React.useState({
     name: false,
     email: false,
@@ -41,22 +45,23 @@ function Register(props) {
   };
 
   useEffect(() => {
-    setFormInValid(hasInvalidInputs());
+    setDisabled(hasInvalidInputs());
   }, [errors]);
 
   const resetForm = useCallback(() => {
-    setValues({});
+    setValues({ name: '', email: '', password: '' });
     setErrors({});
     setIsInputsValid({
       name: false,
       email: false,
       password: false,
     });
-    setFormInValid(true);
-  }, [setValues, setErrors, setIsInputsValid, setFormInValid]);
+    setDisabled(true);
+  }, [setValues, setErrors, setIsInputsValid, setDisabled]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    props.handleRegister(values);
     resetForm();
   };
 
@@ -139,15 +144,12 @@ function Register(props) {
         <button
           className='register__submit button-hover'
           type='submit'
-          disabled={formInValid}
+          disabled={disabled}
         >
           Зарегистрироваться
         </button>
       </form>
-      <span className='register__error'>
-        {/* {props.errorMessage} */}
-        При регистрации пользователя произошла ошибка.
-      </span>
+      <span className='register__error'>{props.errorMessage}</span>
       <div className='register__caption'>
         <span>Уже зарегистрированы?</span>
         <Link className='register__caption-link button-hover' to='/sign-in'>

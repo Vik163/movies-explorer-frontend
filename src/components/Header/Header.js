@@ -76,7 +76,7 @@ function Header(props) {
       <Link className='button-hover' to='/'>
         <img className='header__logo' src={headerLogo} alt='Логотип' />
       </Link>
-      {props.loggedIn ? (
+      {!props.loggedIn ? (
         <div>{headerRegister}</div>
       ) : isDesktop ? (
         <>

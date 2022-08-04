@@ -11,14 +11,13 @@ class Api {
     }
   }
 
-  // getUserInfo() {
-  //   return fetch(`${this._settings.baseUrl}/users/me`, {
-  //     headers: {
-  //       authorization: `Bearer ${localStorage.getItem("jwt")}`,
-  //     },
-  //     credentials: 'include',
-  //   }).then(this._checkResponse);
-  // }
+  getUserInfo() {
+    return fetch(`${this._settings.baseUrl}/users/me`, {
+      headers: {
+      },
+      credentials: 'include',
+    }).then(this._checkResponse);
+  }
 
   getInitialCards() {
     return fetch(`https://api.nomoreparties.co/beatfilm-movies`, {
@@ -54,20 +53,20 @@ class Api {
   //   }).then(this._checkResponse);
   // }
 
-  // sendInfoProfile(formValues) {
-  //   return fetch(`${this._settings.baseUrl}/users/me`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       authorization: `Bearer ${localStorage.getItem("jwt")}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //     credentials: 'include',
-  //     body: JSON.stringify({
-  //       name: formValues.name,
-  //       about: formValues.about,
-  //     }),
-  //   }).then(this._checkResponse);
-  // }
+  sendInfoProfile(formValues) {
+    return fetch(`${this._settings.baseUrl}/users/me`, {
+      method: "PATCH",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        "Content-Type": "application/json",
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        name: formValues.name,
+        email: formValues.email,
+      }),
+    }).then(this._checkResponse);
+  }
 
   // addAvatar(formValues) {
   //   return fetch(`${this._settings.baseUrl}/users/me/avatar`, {

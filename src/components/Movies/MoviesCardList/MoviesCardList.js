@@ -20,7 +20,9 @@ function MoviesCardList(props) {
   const moviesCardList = (
     <ul className='moviesCardList__container'>
       {cards
-        .map((card) => <Card card={card} key={card._id} isMobile={isMobile} />)
+        .map((card, i) => (
+          <Card card={card} key={card._id * i} isMobile={isMobile} />
+        ))
         .slice(0, indexArray)}
     </ul>
   );

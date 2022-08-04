@@ -58,23 +58,23 @@
   line-height: 13px;
   font-weight: 500;
   color: white;
-  padding: 0 0 16px;
+  padding: 0 0 18px;
   border-bottom: 1px solid #424242;
 }
 
 .profile__label:last-of-type {
-  margin-top: 17px;
+  margin-top: 21px;
   border-bottom: none;
   padding: 0;
 }
-/* .profile__input-error {
+.profile__input-error {
   display: none;
   color: #ee3465;
   position: absolute;
   left: 0;
-  top: 50px;
+  top: 35px;
   z-index: 2;
-} */
+}
 
 .profile__input {
   width: 100%;
@@ -120,7 +120,7 @@
   }
 }
 
-.profile__submit_disabled {
+.profile__submit:disabled {
   background-color: #f8f8f8;
   color: #c2c2c2;
   cursor: default;
@@ -172,6 +172,7 @@
   line-height: 16px;
   font-weight: 500;
   color: #ee3465;
+  cursor: pointer;
 }
 
 .profile__error {

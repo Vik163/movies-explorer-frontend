@@ -10,14 +10,14 @@ class Auth {
     throw new Error(`Ошибка: ${res.statusText}`);
   }
 
-  registration(password, email) {
+  registration(name, password, email) {
     return fetch(`${this._settings.baseUrl}/signup`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: 'include',
       body: JSON.stringify({
+        name: name,
         password: password,
         email: email,
       }),
@@ -26,9 +26,9 @@ class Auth {
 
   authorization(password, email) {
     return fetch(`${this._settings.baseUrl}/signin`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       credentials: 'include',
       body: JSON.stringify({
@@ -38,23 +38,34 @@ class Auth {
     }).then(this._checkResponse);
   }
 
-  checkToken(jwt) {
+  checkToken() {
     return fetch(`${this._settings.baseUrl}/users/me`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }).then(this._checkResponse);
+  }
+
+  signOut() {
+    return fetch(`${this._settings.baseUrl}/signout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
       credentials: 'include',
     }).then(this._checkResponse);
   }
 }
 
-const baseUrl = `${window.location.protocol}${process.env.REACT_APP_API_URL || '//localhost:3001'}`
+const baseUrl = `${window.location.protocol}${
+  process.env.REACT_APP_API_URL || 'http://localhost:3001'
+}`;
 
 export const auth = new Auth({
-  baseUrl: baseUrl,
+  baseUrl: 'http://localhost:3001',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
