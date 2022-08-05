@@ -5,12 +5,25 @@ import Preloader from './Preloader/Preloader.js';
 import MoviesCardList from './MoviesCardList/MoviesCardList.js';
 
 function Movies(props) {
-  const { cards } = props;
+  const {
+    cards,
+    searchCards,
+    isPreloader,
+    preloaderMessage,
+    preloaderMessageError,
+  } = props;
+
   return (
     <main className='main'>
-      <SearchForm />
-      {/* <Preloader /> */}
-      <MoviesCardList cards={cards} />
+      <SearchForm searchCards={searchCards} />
+      {isPreloader ? (
+        <Preloader
+          preloaderMessage={preloaderMessage}
+          preloaderMessageError={preloaderMessageError}
+        />
+      ) : (
+        <MoviesCardList cards={cards} />
+      )}
     </main>
   );
 }

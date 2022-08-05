@@ -6,16 +6,18 @@ import './App.css';
 import Login from '../Login.js';
 import Register from '../Register/Register.js';
 import Profile from '../Profile/Profile.js';
-import ErrorPage from '../ErrorPage/ErrorPage.js';
+import ErrorPage from '../Errors/ErrorPage.js';
 import Header from '../Header/Header.js';
 import Footer from '../Footer/Footer.js';
 import Main from '../Main/Main.js';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies';
+import errorHandler from '../Errors/ErrorHandler';
 
 import ProtectedRoute from '../ProtectedRoute';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { api } from '../../utils/api.js';
+import { mainApi } from '../../utils/mainApi.js';
+import { moviesApi } from '../../utils/moviesApi.js';
 import { auth } from '../../utils/auth.js';
 
 function App() {
@@ -28,14 +30,12 @@ function App() {
   });
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isAddInfoTooltip, setIsAddInfoTooltip] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [messageInfoTooltip, setMessageInfoTooltip] = useState('');
+  const [errorPageMessage, setErrorPageMessage] = useState('');
+  const [preloaderMessage, setPreloaderMessage] = useState('');
+  const [preloaderMessageError, setPreloaderMessageError] = useState('');
   const [isAddConfirmPopupOpen, setIsAddConfirmPopupOpen] = useState(false);
-  const [isPreloader, setIsPreloader] = useState('Сохранить');
+  const [isPreloader, setIsPreloader] = useState(false);
   const [valueSubmitDeleteCard, setValueSubmitDeleteCard] = useState('Да');
   const [selectedCard, setSelectedCard] = useState({});
   const [cardDelete, setCardDelete] = useState({});
@@ -53,13 +53,16 @@ function App() {
           });
           setLoggedIn(true);
         }
+        history.push('/movies');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
-    checkToken();
-  }, []);
+    !errorPageMessage && checkToken();
+  }, [loggedIn]);
 
   useEffect(() => {
     if (loggedIn) {
@@ -68,19 +71,14 @@ function App() {
   }, [loggedIn]);
 
   useEffect(() => {
-    setIsPreloader(true);
-
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
+    Promise.all([mainApi.getUserInfo(), moviesApi.getInitialCards()])
       .then(([userData, cards]) => {
-        console.log(userData);
         setCurrentUser(userData);
         setCards(cards);
       })
       .catch((err) => {
+        handleErrors(err);
         console.log(err);
-      })
-      .finally(() => {
-        setIsPreloader(false);
       });
   }, []);
 
@@ -90,14 +88,13 @@ function App() {
       .then((res) => {
         if (res) {
           history.push('/movies');
+          setErrorMessage('');
         }
       })
       .catch((err) => {
+        handleErrors(err);
         err.message === 'Ошибка: Bad Request' &&
           setErrorMessage('При регистрации пользователя произошла ошибка');
-        err.message === 'Ошибка: Conflict' &&
-          setErrorMessage('Пользователь с таким email уже существует');
-
         console.log(err);
       });
   }
@@ -107,18 +104,18 @@ function App() {
       .authorization(password, email)
       .then((data) => {
         checkToken();
-
         setLoggedIn(true);
-
         setCurrentUser(data.user);
-        api.getInitialCards().then((cards) => {
+        mainApi.getInitialCards().then((cards) => {
           setCards(cards);
           history.push('/movies');
+          setErrorMessage('');
         });
       })
       .catch((err) => {
-        err.message === 'Ошибка: Unauthorized' &&
-          setErrorMessage('Вы ввели неправильный логин или пароль');
+        handleErrors(err);
+        err.message === 'Ошибка: Bad Request' &&
+          setErrorMessage('При авторизации пользователя произошла ошибка');
         console.log(err);
       });
   }
@@ -141,26 +138,75 @@ function App() {
   }
 
   function handleUpdateUser(obj) {
-    api
+    mainApi
       .sendInfoProfile(obj)
       .then((result) => {
-        if (result.email === currentUser.email) {
-          throw new Error('Ошибка: Conflict');
-        }
         setCurrentUser(result);
+        setErrorMessage('');
       })
       .catch((err) => {
+        handleErrors(err);
         err.message === 'Ошибка: Bad Request' &&
           setErrorMessage('При обновлении профиля произошла ошибка');
-        err.message === 'Ошибка: Conflict' &&
-          setErrorMessage('Пользователь с таким email уже существует');
+        console.log(err);
+      });
+  }
+
+  function handleErrors(err) {
+    if (
+      err.message === 'Ошибка: 404' ||
+      err.message === 'Ошибка: Internal Server Error' ||
+      err.message === 'Failed to fetch'
+    ) {
+      setErrorPageMessage(errorHandler(err));
+      history.push('/error');
+    }
+    setErrorMessage(errorHandler(err));
+  }
+
+  function searchCards(value, isToggle) {
+    setIsPreloader(true);
+    moviesApi
+      .searchCards()
+      .then((cards) => {
+        if (cards) {
+          const arr = cards.filter((item) => {
+            if (item.nameRU && item.nameEN) {
+              if (isToggle) {
+                if (item.duration < 40) {
+                  return (
+                    item.nameRU.toLowerCase().includes(value.toLowerCase()) ||
+                    item.nameEN.toLowerCase().includes(value.toLowerCase())
+                  );
+                }
+              } else {
+                return (
+                  item.nameRU.toLowerCase().includes(value.toLowerCase()) ||
+                  item.nameEN.toLowerCase().includes(value.toLowerCase())
+                );
+              }
+            }
+          });
+          if (!(arr.length === 0)) {
+            setIsPreloader(false);
+            setCards(arr);
+          } else {
+            setPreloaderMessage('Ничего не найдено');
+          }
+        }
+      })
+      .catch((err) => {
+        err &&
+          setPreloaderMessageError(
+            'Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
+          );
         console.log(err);
       });
   }
 
   function handleAddPlaceSubmit(obj, clearInput) {
     setIsPreloader(true);
-    api
+    mainApi
       .addCard(obj)
       .then((newCard) => {
         setCards([newCard, ...cards]);
@@ -178,7 +224,7 @@ function App() {
     e.preventDefault();
 
     setValueSubmitDeleteCard('Сохранение...');
-    api
+    mainApi
       .deleteCard(cardDelete)
       .then(() => {
         setCards((state) => state.filter((c) => !(c._id === cardDelete._id)));
@@ -198,7 +244,7 @@ function App() {
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i === currentUser._id);
-    const action = isLiked ? api.deleteLike(card) : api.addLikes(card);
+    const action = isLiked ? mainApi.deleteLike(card) : mainApi.addLikes(card);
     action
       .then((result) => {
         setCards((state) =>
@@ -228,7 +274,7 @@ function App() {
             <Login handleLogin={handleLogin} errorMessage={errorMessage} />
           </Route>
           <Route path='/error'>
-            <ErrorPage />
+            <ErrorPage errorPageMessage={errorPageMessage} />
           </Route>
           <Route exact path='/'>
             <Header loggedIn={loggedIn} />
@@ -246,7 +292,13 @@ function App() {
             </Route>
             <Route path='/movies'>
               <Header loggedIn={loggedIn} />
-              <Movies cards={cards} />
+              <Movies
+                cards={cards}
+                searchCards={searchCards}
+                isPreloader={isPreloader}
+                preloaderMessage={preloaderMessage}
+                preloaderMessageError={preloaderMessageError}
+              />
               <Footer />
             </Route>
             <Route path='/saved-movies'>

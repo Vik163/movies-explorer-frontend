@@ -6,11 +6,14 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function Profile(props) {
   const currentUser = React.useContext(CurrentUserContext);
+  console.log(currentUser);
 
   const [isToggle, setIsToggle] = useState(false);
   const [isName, setIsName] = useState('');
   const [values, setValues] = React.useState({});
+  console.log(values);
   const [errors, setErrors] = React.useState({});
+  const [errorUser, setErrorUser] = React.useState('');
   const [disabled, setDisabled] = React.useState(true);
   const [inputDisabled, setInputDisabled] = useState(true);
   const [isInputsValid, setIsInputsValid] = React.useState({
@@ -42,8 +45,17 @@ function Profile(props) {
   };
 
   useEffect(() => {
-    setDisabled(hasInvalidInputs());
-  }, [errors]);
+    if (
+      values.name === currentUser.name &&
+      values.email === currentUser.email
+    ) {
+      setErrorUser('Пользователь с таким email уже существует');
+      setDisabled(true);
+    } else {
+      setErrorUser('');
+      setDisabled(hasInvalidInputs());
+    }
+  }, [values]);
 
   const resetForm = useCallback(() => {
     setValues({});
@@ -57,7 +69,7 @@ function Profile(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.handleUpdateUser(values)
+    props.handleUpdateUser(values);
     setInputDisabled(true);
     resetForm();
   };
@@ -124,6 +136,7 @@ function Profile(props) {
       </form>
       <span className='profile__error'>
         {props.errorMessage}
+        {errorUser}
       </span>
       <div
         className='profile__edit-container'

@@ -1,4 +1,4 @@
-class Api {
+class MainApi {
   constructor(settings) {
     this._settings = settings;
   }
@@ -7,24 +7,15 @@ class Api {
     if (res.ok) {
       return res.json();
     } else {
-      return Promise.reject(`Ошибка: ${res.status}`);
+      throw new Error(`Ошибка: ${res.statusText}`);
+      // return Promise.reject(`Ошибка: ${res.status}`);
     }
   }
 
   getUserInfo() {
     return fetch(`${this._settings.baseUrl}/users/me`, {
-      headers: {
-      },
+      headers: {},
       credentials: 'include',
-    }).then(this._checkResponse);
-  }
-
-  getInitialCards() {
-    return fetch(`https://api.nomoreparties.co/beatfilm-movies`, {
-      headers: {
-        // authorization: `Bearer ${localStorage.getItem('jwt')}`,
-      },
-      // credentials: 'include',
     }).then(this._checkResponse);
   }
 
@@ -55,10 +46,10 @@ class Api {
 
   sendInfoProfile(formValues) {
     return fetch(`${this._settings.baseUrl}/users/me`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        authorization: `Bearer ${localStorage.getItem("jwt")}`,
-        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem('jwt')}`,
+        'Content-Type': 'application/json',
       },
       credentials: 'include',
       body: JSON.stringify({
@@ -111,7 +102,7 @@ const baseUrl = `${window.location.protocol}${
   process.env.REACT_APP_API_URL || '//localhost:3001'
 }`;
 
-export const api = new Api({
+export const mainApi = new MainApi({
   baseUrl: baseUrl,
   headers: {
     'Content-Type': 'application/json',

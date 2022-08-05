@@ -5,6 +5,8 @@ import './MoviesCardList.css';
 import Card from '../MoviesCard/MoviesCard.js';
 
 function MoviesCardList(props) {
+  const { cards } = props;
+
   const [isDesktop, setIsDesktop] = useState(
     window.matchMedia('(min-width: 928px)').matches
   );
@@ -15,14 +17,10 @@ function MoviesCardList(props) {
 
   const [indexArray, setIndexArray] = useState(index);
 
-  const { cards } = props;
-
   const moviesCardList = (
     <ul className='moviesCardList__container'>
       {cards
-        .map((card, i) => (
-          <Card card={card} key={card._id * i} isMobile={isMobile} />
-        ))
+        .map((card, i) => <Card card={card} key={i} isMobile={isMobile} />)
         .slice(0, indexArray)}
     </ul>
   );
