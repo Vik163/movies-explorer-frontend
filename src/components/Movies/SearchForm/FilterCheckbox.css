@@ -97,19 +97,19 @@
   }
 }
 
-.searchForm__checkbox:checked + .searchForm__label::after {
+.searchForm__checkbox-checked + .searchForm__label::after {
   left: 16px;
 }
 
 @media screen and (max-width: 900px) {
-  .searchForm__checkbox:checked + .searchForm__label::after {
+  .searchForm__checkbox-checked + .searchForm__label::after {
     left: auto;
     right: 20px;
   }
 }
 
 @media screen and (max-width: 600px) {
-  .searchForm__checkbox:checked + .searchForm__label::after {
+  .searchForm__checkbox-checked + .searchForm__label::after {
     right: 93px;
   }
 }

@@ -1,16 +1,23 @@
 import React from 'react';
 
 import SearchForm from './Movies/SearchForm/SearchForm';
-import Preloader from './Movies/Preloader/Preloader';
 import MoviesCardList from './Movies/MoviesCardList/MoviesCardList';
 
 function SavedMovies(props) {
-  const { savedCards } = props;
+  const savePage = true;
+  const { savedCards, searchCards, story, searchShortCards } = props;
   return (
     <main className='main'>
-      <SearchForm />
-      {/* <Preloader /> */}
-      <MoviesCardList cards={savedCards} />
+      <SearchForm
+        searchCards={searchCards}
+        story={story}
+        searchShortCards={searchShortCards}
+      />
+      <MoviesCardList
+        savedCards={savedCards}
+        cards={savedCards}
+        savePage={savePage}
+      />
     </main>
   );
 }

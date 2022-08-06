@@ -11,13 +11,6 @@ class MoviesApi {
     }
   }
 
-  getInitialCards() {
-    return fetch(`https://api.nomoreparties.co/beatfilm-movies`, {
-      headers: {},
-      // credentials: 'include',
-    }).then(this._checkResponse);
-  }
-
   searchCards() {
     return fetch(`https://api.nomoreparties.co/beatfilm-movies`, {
       headers: {},

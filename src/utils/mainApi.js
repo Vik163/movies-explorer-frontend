@@ -8,7 +8,6 @@ class MainApi {
       return res.json();
     } else {
       throw new Error(`Ошибка: ${res.statusText}`);
-      // return Promise.reject(`Ошибка: ${res.status}`);
     }
   }
 
@@ -19,36 +18,48 @@ class MainApi {
     }).then(this._checkResponse);
   }
 
-  // addCard(formValues) {
-  //   return fetch(`${this._settings.baseUrl}/cards`, {
-  //     method: "POST",
-  //     headers: {
-  //       authorization: `Bearer ${localStorage.getItem("jwt")}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //     credentials: 'include',
-  //     body: JSON.stringify({
-  //       name: formValues.name,
-  //       link: formValues.link,
-  //     }),
-  //   }).then(this._checkResponse);
-  // }
+  getSaveCards() {
+    return fetch(`${this._settings.baseUrl}/movies`, {
+      headers: {},
+      credentials: 'include',
+    }).then(this._checkResponse);
+  }
 
-  // deleteCard(obj) {
-  //   return fetch(`${this._settings.baseUrl}/cards/${obj._id}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       authorization: `Bearer ${localStorage.getItem("jwt")}`,
-  //     },
-  //     credentials: 'include',
-  //   }).then(this._checkResponse);
-  // }
+  addCard(card) {
+    return fetch(`${this._settings.baseUrl}/movies`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        country: card.country,
+        director: card.director,
+        duration: card.duration,
+        year: card.year,
+        description: card.description,
+        image: `https://api.nomoreparties.co/${card.image.url}`,
+        trailerLink: card.trailerLink,
+        nameRU: card.nameRU,
+        nameEN: card.nameEN,
+        thumbnail: `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`,
+        movieId: card.id,
+      }),
+    }).then(this._checkResponse);
+  }
+
+  deleteCard(obj) {
+    return fetch(`${this._settings.baseUrl}/movies/${obj._id}`, {
+      method: 'DELETE',
+      headers: {},
+      credentials: 'include',
+    }).then(this._checkResponse);
+  }
 
   sendInfoProfile(formValues) {
     return fetch(`${this._settings.baseUrl}/users/me`, {
       method: 'PATCH',
       headers: {
-        authorization: `Bearer ${localStorage.getItem('jwt')}`,
         'Content-Type': 'application/json',
       },
       credentials: 'include',
@@ -58,44 +69,6 @@ class MainApi {
       }),
     }).then(this._checkResponse);
   }
-
-  // addAvatar(formValues) {
-  //   return fetch(`${this._settings.baseUrl}/users/me/avatar`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       authorization: `Bearer ${localStorage.getItem("jwt")}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //     credentials: 'include',
-  //     body: JSON.stringify({
-  //       avatar: formValues.avatar,
-  //     }),
-  //   }).then(this._checkResponse);
-  // }
-
-  // addLikes(obj) {
-  //   return fetch(`${this._settings.baseUrl}/cards/${obj._id}/likes`, {
-  //     method: "PUT",
-  //     headers: {
-  //       authorization: `Bearer ${localStorage.getItem("jwt")}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //     credentials: 'include',
-  //     body: JSON.stringify({
-  //       likes: obj.likes,
-  //     }),
-  //   }).then(this._checkResponse);
-  // }
-
-  // deleteLike(obj) {
-  //   return fetch(`${this._settings.baseUrl}/cards/${obj._id}/likes`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       authorization: `Bearer ${localStorage.getItem("jwt")}`,
-  //     },
-  //     credentials: 'include',
-  //   }).then(this._checkResponse);
-  // }
 }
 
 const baseUrl = `${window.location.protocol}${

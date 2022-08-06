@@ -30,16 +30,20 @@ function App() {
   });
 
   const [loggedIn, setLoggedIn] = useState(false);
+  const [story, setStory] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const [errorPageMessage, setErrorPageMessage] = useState('');
   const [preloaderMessage, setPreloaderMessage] = useState('');
   const [preloaderMessageError, setPreloaderMessageError] = useState('');
-  const [isAddConfirmPopupOpen, setIsAddConfirmPopupOpen] = useState(false);
   const [isPreloader, setIsPreloader] = useState(false);
   const [valueSubmitDeleteCard, setValueSubmitDeleteCard] = useState('Да');
   const [selectedCard, setSelectedCard] = useState({});
   const [cardDelete, setCardDelete] = useState({});
+  const [initialCards, setInitialCards] = useState([]);
   const [cards, setCards] = useState([]);
+  // const [saveCard, setSaveCard] = useState();
+  const [savedCards, setSavedCards] = useState([]);
+  // console.log(savedCards);
 
   const checkToken = () => {
     auth
@@ -71,10 +75,17 @@ function App() {
   }, [loggedIn]);
 
   useEffect(() => {
-    Promise.all([mainApi.getUserInfo(), moviesApi.getInitialCards()])
-      .then(([userData, cards]) => {
+    moviesApi.searchCards().then((cards) => {
+      setInitialCards(cards);
+      setCards(cards);
+    });
+  }, []);
+
+  useEffect(() => {
+    Promise.all([mainApi.getUserInfo(), mainApi.getSaveCards()])
+      .then(([userData, saveCards]) => {
         setCurrentUser(userData);
-        setCards(cards);
+        setSavedCards(saveCards);
       })
       .catch((err) => {
         handleErrors(err);
@@ -142,7 +153,7 @@ function App() {
       .sendInfoProfile(obj)
       .then((result) => {
         setCurrentUser(result);
-        setErrorMessage('');
+        setErrorMessage('Данные успешно обновлены! ');
       })
       .catch((err) => {
         handleErrors(err);
@@ -165,11 +176,13 @@ function App() {
   }
 
   function searchCards(value, isToggle) {
+    console.log(isToggle);
     setIsPreloader(true);
     moviesApi
       .searchCards()
       .then((cards) => {
         if (cards) {
+          console.log(cards);
           const arr = cards.filter((item) => {
             if (item.nameRU && item.nameEN) {
               if (isToggle) {
@@ -190,6 +203,11 @@ function App() {
           if (!(arr.length === 0)) {
             setIsPreloader(false);
             setCards(arr);
+            setStory({
+              isToggle: isToggle,
+              value: value,
+              arr: arr,
+            });
           } else {
             setPreloaderMessage('Ничего не найдено');
           }
@@ -204,47 +222,49 @@ function App() {
       });
   }
 
-  function handleAddPlaceSubmit(obj, clearInput) {
+  function searchShortCards(isToggle) {
     setIsPreloader(true);
-    mainApi
-      .addCard(obj)
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
-        clearInput();
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
+    if (isToggle) {
+      const arr = initialCards.filter((item) => {
+        return item.duration < 40;
+      });
+      if (!(arr.length === 0)) {
         setIsPreloader(false);
-      });
+        story.arr ? setCards(story.arr) : setCards(arr);
+      } else {
+        setPreloaderMessage('Ничего не найдено');
+      }
+    } else {
+      setIsPreloader(false);
+      story.arr ? setCards(story.arr) : setCards(initialCards);
+    }
   }
 
-  function handleCardDelete(e) {
-    e.preventDefault();
-
-    setValueSubmitDeleteCard('Сохранение...');
+  function addCard(card) {
     mainApi
-      .deleteCard(cardDelete)
-      .then(() => {
-        setCards((state) => state.filter((c) => !(c._id === cardDelete._id)));
+      .addCard(card)
+      .then((saveCard) => {
+        setSavedCards([saveCard, ...savedCards]);
       })
       .catch((err) => {
         console.log(err);
-      })
-      .finally(() => {
-        setValueSubmitDeleteCard('Да');
       });
   }
 
-  function onConfirmDelete(card) {
-    setIsAddConfirmPopupOpen(true);
-    setCardDelete(card);
+  function deleteCard(card) {
+    mainApi
+      .deleteCard(card)
+      .then(() => {
+        setSavedCards((state) => state.filter((c) => !(c._id === card._id)));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i === currentUser._id);
-    const action = isLiked ? mainApi.deleteLike(card) : mainApi.addLikes(card);
+    const action = isLiked ? mainApi.deleteCard(card) : mainApi.addCard(card);
     action
       .then((result) => {
         setCards((state) =>
@@ -294,7 +314,12 @@ function App() {
               <Header loggedIn={loggedIn} />
               <Movies
                 cards={cards}
+                story={story}
                 searchCards={searchCards}
+                searchShortCards={searchShortCards}
+                addCard={addCard}
+                deleteCard={deleteCard}
+                savedCards={savedCards}
                 isPreloader={isPreloader}
                 preloaderMessage={preloaderMessage}
                 preloaderMessageError={preloaderMessageError}
@@ -303,7 +328,12 @@ function App() {
             </Route>
             <Route path='/saved-movies'>
               <Header loggedIn={loggedIn} />
-              <SavedMovies />
+              <SavedMovies
+                savedCards={savedCards}
+                story={story}
+                searchCards={searchCards}
+                searchShortCards={searchShortCards}
+              />
               <Footer />
             </Route>
           </ProtectedRoute>

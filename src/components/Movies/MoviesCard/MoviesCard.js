@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import './MoviesCard.css';
 
 function MoviesCard(props) {
-  const { card, isMobile } = props;
+  const { card, isMobile, deleteCard, addCard, savedCards, savePage } = props;
 
-  const isLiked = false;
+  const isLiked = useCallback(() => {
+    return savedCards.some((i) => i.nameRU === card.nameRU);
+  }, [savedCards]);
+
   const cardLikeButtonClassName = `moviesCard__icon button-hover ${
-    isLiked && 'moviesCard__icon_active'
+    isLiked()
+      ? savePage && 'moviesCard__icon_delete'
+      : 'moviesCard__icon_active'
   }`;
+
+  const handleLike = () => {
+    if (!isLiked()) {
+      addCard(card);
+    } else {
+      deleteCard(savedCards.find((i) => i.nameRU === card.nameRU));
+    }
+  };
 
   const getTime = (min) => {
     const hours = Math.trunc(min / 60);
@@ -23,8 +36,12 @@ function MoviesCard(props) {
           className='moviesCard__image button-hover'
           src={
             isMobile
-              ? `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`
-              : `https://api.nomoreparties.co/${card.image.url}`
+              ? card.image.url
+                ? `https://api.nomoreparties.co/${card.image.formats.thumbnail.url}`
+                : card.thumbnail
+              : card.image.url
+              ? `https://api.nomoreparties.co/${card.image.url}`
+              : card.image
           }
           alt={card.nameRU}
         />
@@ -35,6 +52,7 @@ function MoviesCard(props) {
           className={cardLikeButtonClassName}
           type='button'
           aria-label='like'
+          onClick={handleLike}
         ></button>
       </div>
       <p className='moviesCard__duration'>{getTime(card.duration)}</p>

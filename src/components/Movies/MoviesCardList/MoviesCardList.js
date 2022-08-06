@@ -5,7 +5,8 @@ import './MoviesCardList.css';
 import Card from '../MoviesCard/MoviesCard.js';
 
 function MoviesCardList(props) {
-  const { cards } = props;
+  const { cards, deleteCard, addCard, savedCards, savePage } = props;
+  console.log(savePage);
 
   const [isDesktop, setIsDesktop] = useState(
     window.matchMedia('(min-width: 928px)').matches
@@ -14,14 +15,23 @@ function MoviesCardList(props) {
     window.matchMedia('(max-width: 600px)').matches
   );
   const index = (isDesktop && 12) || (isMobile && 5) || 8;
-
   const [indexArray, setIndexArray] = useState(index);
 
   const moviesCardList = (
     <ul className='moviesCardList__container'>
       {cards
-        .map((card, i) => <Card card={card} key={i} isMobile={isMobile} />)
-        .slice(0, indexArray)}
+        .map((card) => (
+          <Card
+            card={card}
+            key={card.id || card._id}
+            isMobile={isMobile}
+            addCard={addCard}
+            deleteCard={deleteCard}
+            savedCards={savedCards}
+            savePage={savePage}
+          />
+        ))
+        .slice(0, !savePage ? indexArray : 1000)}
     </ul>
   );
 
@@ -45,7 +55,7 @@ function MoviesCardList(props) {
       window
         .matchMedia('(max-width: 600px)')
         .removeEventListener('change', handler);
-  }, []);
+  }, [isDesktop]);
 
   const addMovies = () => {
     isDesktop ? setIndexArray(indexArray + 3) : setIndexArray(indexArray + 2);
@@ -55,7 +65,7 @@ function MoviesCardList(props) {
     <section className='moviesCardList'>
       <>
         {moviesCardList}
-        {moviesCardList.props.children.length < cards.length && (
+        {!savePage && moviesCardList.props.children.length < cards.length && (
           <button
             className='moviesCardList__button-else button-hover'
             aria-label='in'
