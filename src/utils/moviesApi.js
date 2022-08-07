@@ -13,14 +13,10 @@ class MoviesApi {
 
   searchCards() {
     return fetch(`https://api.nomoreparties.co/beatfilm-movies`, {
-      headers: {},
+      headers: { 'Content-Type': 'application/json' },
       // credentials: 'include',
     }).then(this._checkResponse);
   }
 }
 
-export const moviesApi = new MoviesApi({
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+export const moviesApi = new MoviesApi();

@@ -13,14 +13,14 @@ class MainApi {
 
   getUserInfo() {
     return fetch(`${this._settings.baseUrl}/users/me`, {
-      headers: {},
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     }).then(this._checkResponse);
   }
 
   getSaveCards() {
     return fetch(`${this._settings.baseUrl}/movies`, {
-      headers: {},
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     }).then(this._checkResponse);
   }
@@ -51,7 +51,7 @@ class MainApi {
   deleteCard(obj) {
     return fetch(`${this._settings.baseUrl}/movies/${obj._id}`, {
       method: 'DELETE',
-      headers: {},
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     }).then(this._checkResponse);
   }
@@ -77,7 +77,4 @@ const baseUrl = `${window.location.protocol}${
 
 export const mainApi = new MainApi({
   baseUrl: baseUrl,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
