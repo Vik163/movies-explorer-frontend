@@ -1,23 +1,44 @@
 import React from 'react';
 
 import SearchForm from './Movies/SearchForm/SearchForm';
+import Preloader from './Movies/Preloader/Preloader.js';
+
 import MoviesCardList from './Movies/MoviesCardList/MoviesCardList';
 
 function SavedMovies(props) {
-  const savePage = true;
-  const { savedCards, searchCards, story, searchShortCards } = props;
+  const pageSaveMovies = true;
+  const {
+    savedCards,
+    searchSaveCards,
+    story,
+    searchShortCards,
+    deleteCard,
+    isPreloader,
+    preloaderMessage,
+    preloaderMessageError,
+  } = props;
+
   return (
     <main className='main'>
       <SearchForm
-        searchCards={searchCards}
+        searchSaveCards={searchSaveCards}
         story={story}
+        pageSaveMovies={pageSaveMovies}
         searchShortCards={searchShortCards}
       />
-      <MoviesCardList
-        savedCards={savedCards}
-        cards={savedCards}
-        savePage={savePage}
-      />
+      {isPreloader ? (
+        <Preloader
+          preloaderMessage={preloaderMessage}
+          preloaderMessageError={preloaderMessageError}
+        />
+      ) : (
+        <MoviesCardList
+          savedCards={savedCards}
+          cards={savedCards}
+          pageSaveMovies={pageSaveMovies}
+          deleteCard={deleteCard}
+        />
+      )}
     </main>
   );
 }

@@ -3,16 +3,19 @@ import React, { useCallback } from 'react';
 import './MoviesCard.css';
 
 function MoviesCard(props) {
-  const { card, isMobile, deleteCard, addCard, savedCards, savePage } = props;
+  const { card, isMobile, deleteCard, addCard, savedCards, pageSaveMovies } =
+    props;
 
   const isLiked = useCallback(() => {
     return savedCards.some((i) => i.nameRU === card.nameRU);
   }, [savedCards]);
 
+  const iconSavedMovies = pageSaveMovies
+    ? 'moviesCard__icon_delete'
+    : 'moviesCard__icon_active';
+
   const cardLikeButtonClassName = `moviesCard__icon button-hover ${
-    isLiked()
-      ? savePage && 'moviesCard__icon_delete'
-      : 'moviesCard__icon_active'
+    isLiked() && iconSavedMovies
   }`;
 
   const handleLike = () => {

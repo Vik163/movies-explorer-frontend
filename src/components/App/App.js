@@ -23,40 +23,25 @@ import { auth } from '../../utils/auth.js';
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const history = useHistory();
-  const [logInfo, setLogInfo] = useState({
-    id: '',
-    name: '',
-    email: '',
-  });
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [story, setStory] = useState({});
+  const [storySavePage, setStorySavePage] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const [errorPageMessage, setErrorPageMessage] = useState('');
   const [preloaderMessage, setPreloaderMessage] = useState('');
   const [preloaderMessageError, setPreloaderMessageError] = useState('');
   const [isPreloader, setIsPreloader] = useState(false);
-  const [valueSubmitDeleteCard, setValueSubmitDeleteCard] = useState('Да');
-  const [selectedCard, setSelectedCard] = useState({});
-  const [cardDelete, setCardDelete] = useState({});
+  const [initialSavedCards, setInitialSavedCards] = useState([]);
   const [initialCards, setInitialCards] = useState([]);
   const [cards, setCards] = useState([]);
-  // const [saveCard, setSaveCard] = useState();
   const [savedCards, setSavedCards] = useState([]);
-  // console.log(savedCards);
 
   const checkToken = () => {
     auth
       .checkToken()
       .then((res) => {
-        if (res) {
-          setLogInfo({
-            id: res._id,
-            name: res.name,
-            email: res.email,
-          });
-          setLoggedIn(true);
-        }
+        res && setLoggedIn(true);
         history.push('/movies');
       })
       .catch((err) => {
@@ -85,6 +70,7 @@ function App() {
     Promise.all([mainApi.getUserInfo(), mainApi.getSaveCards()])
       .then(([userData, saveCards]) => {
         setCurrentUser(userData);
+        setInitialSavedCards(saveCards);
         setSavedCards(saveCards);
       })
       .catch((err) => {
@@ -136,11 +122,7 @@ function App() {
       .signOut()
       .then(() => {
         setLoggedIn(false);
-        setLogInfo({
-          id: null,
-          email: null,
-          name: null,
-        });
+
         history.push('/');
       })
       .catch((err) => {
@@ -176,13 +158,11 @@ function App() {
   }
 
   function searchCards(value, isToggle) {
-    console.log(isToggle);
     setIsPreloader(true);
     moviesApi
       .searchCards()
       .then((cards) => {
         if (cards) {
-          console.log(cards);
           const arr = cards.filter((item) => {
             if (item.nameRU && item.nameEN) {
               if (isToggle) {
@@ -222,21 +202,76 @@ function App() {
       });
   }
 
-  function searchShortCards(isToggle) {
+  function searchSaveCards(value, isToggle) {
     setIsPreloader(true);
+
+    const arr = savedCards.filter((item) => {
+      if (item.nameRU && item.nameEN) {
+        if (isToggle) {
+          if (item.duration < 40) {
+            return (
+              item.nameRU.toLowerCase().includes(value.toLowerCase()) ||
+              item.nameEN.toLowerCase().includes(value.toLowerCase())
+            );
+          }
+        } else {
+          return (
+            item.nameRU.toLowerCase().includes(value.toLowerCase()) ||
+            item.nameEN.toLowerCase().includes(value.toLowerCase())
+          );
+        }
+      }
+    });
+    if (!(arr.length === 0)) {
+      setSavedCards(arr);
+      setStorySavePage({
+        isToggle: isToggle,
+        value: value,
+        arr: arr,
+      });
+    } else {
+      setPreloaderMessage('Ничего не найдено');
+    }
+    setIsPreloader(false);
+  }
+
+  function searchShortCards(isToggle, pageSaveMovies) {
+    setIsPreloader(true);
+    const arrCards = pageSaveMovies ? savedCards : initialCards;
+
+    pageSaveMovies
+      ? setStorySavePage({
+          isToggle: isToggle,
+        })
+      : setStory({
+          isToggle: isToggle,
+        });
+
     if (isToggle) {
-      const arr = initialCards.filter((item) => {
+      const arr = arrCards.filter((item) => {
         return item.duration < 40;
       });
       if (!(arr.length === 0)) {
         setIsPreloader(false);
-        story.arr ? setCards(story.arr) : setCards(arr);
+        story.arr
+          ? pageSaveMovies
+            ? setSavedCards(story.arr)
+            : setCards(story.arr)
+          : pageSaveMovies
+          ? setSavedCards(arr)
+          : setCards(arr);
       } else {
         setPreloaderMessage('Ничего не найдено');
       }
     } else {
       setIsPreloader(false);
-      story.arr ? setCards(story.arr) : setCards(initialCards);
+      story.arr
+        ? pageSaveMovies
+          ? setSavedCards(story.arr)
+          : setCards(story.arr)
+        : pageSaveMovies
+        ? setSavedCards(initialSavedCards)
+        : setCards(arrCards);
     }
   }
 
@@ -260,24 +295,6 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  }
-
-  function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i === currentUser._id);
-    const action = isLiked ? mainApi.deleteCard(card) : mainApi.addCard(card);
-    action
-      .then((result) => {
-        setCards((state) =>
-          state.map((c) => (c._id === card._id ? result : c))
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  function handleCardClick(card) {
-    setSelectedCard(card);
   }
 
   return (
@@ -330,9 +347,13 @@ function App() {
               <Header loggedIn={loggedIn} />
               <SavedMovies
                 savedCards={savedCards}
-                story={story}
-                searchCards={searchCards}
+                story={storySavePage}
+                deleteCard={deleteCard}
+                searchSaveCards={searchSaveCards}
                 searchShortCards={searchShortCards}
+                isPreloader={isPreloader}
+                preloaderMessage={preloaderMessage}
+                preloaderMessageError={preloaderMessageError}
               />
               <Footer />
             </Route>

@@ -6,12 +6,10 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function Profile(props) {
   const currentUser = React.useContext(CurrentUserContext);
-  console.log(currentUser);
 
   const [isToggle, setIsToggle] = useState(false);
   const [isName, setIsName] = useState('');
   const [values, setValues] = React.useState({});
-  console.log(values);
   const [errors, setErrors] = React.useState({});
   const [errorUser, setErrorUser] = React.useState('');
   const [disabled, setDisabled] = React.useState(true);

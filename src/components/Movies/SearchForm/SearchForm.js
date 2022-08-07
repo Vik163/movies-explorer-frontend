@@ -4,7 +4,13 @@ import './SearchForm.css';
 import './FilterCheckbox.css';
 
 function SearchForm(props) {
-  const { searchCards, story, searchShortCards } = props;
+  const {
+    searchCards,
+    story,
+    searchShortCards,
+    pageSaveMovies,
+    searchSaveCards,
+  } = props;
   const [isError, setIsError] = useState(false);
   const [value, setValue] = React.useState('');
   const [isToggle, setIsToggle] = useState(false);
@@ -18,12 +24,13 @@ function SearchForm(props) {
     isError && setIsError(true);
   }, [isError]);
 
+  // история формы поиска
   useEffect(() => {
-    if (story.value) {
+    if (!(story === {})) {
       setIsToggle(story.isToggle);
       setValue(story.value);
     }
-  }, []);
+  }, [story]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,8 +38,12 @@ function SearchForm(props) {
     if (!value) {
       setIsError(true);
     } else {
-      searchCards(value, isToggle);
-      resetForm();
+      if (pageSaveMovies) {
+        searchSaveCards(value, isToggle);
+      } else {
+        searchCards(value, isToggle);
+        resetForm();
+      }
     }
   };
 
@@ -42,7 +53,7 @@ function SearchForm(props) {
 
   const toggle = () => {
     setIsToggle(!isToggle);
-    searchShortCards(!isToggle);
+    searchShortCards(!isToggle, pageSaveMovies);
   };
 
   return (

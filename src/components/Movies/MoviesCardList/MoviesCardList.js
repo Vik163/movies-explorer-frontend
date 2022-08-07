@@ -5,8 +5,7 @@ import './MoviesCardList.css';
 import Card from '../MoviesCard/MoviesCard.js';
 
 function MoviesCardList(props) {
-  const { cards, deleteCard, addCard, savedCards, savePage } = props;
-  console.log(savePage);
+  const { cards, deleteCard, addCard, savedCards, pageSaveMovies } = props;
 
   const [isDesktop, setIsDesktop] = useState(
     window.matchMedia('(min-width: 928px)').matches
@@ -28,10 +27,10 @@ function MoviesCardList(props) {
             addCard={addCard}
             deleteCard={deleteCard}
             savedCards={savedCards}
-            savePage={savePage}
+            pageSaveMovies={pageSaveMovies}
           />
         ))
-        .slice(0, !savePage ? indexArray : 1000)}
+        .slice(0, !pageSaveMovies ? indexArray : 1000)}
     </ul>
   );
 
@@ -65,16 +64,17 @@ function MoviesCardList(props) {
     <section className='moviesCardList'>
       <>
         {moviesCardList}
-        {!savePage && moviesCardList.props.children.length < cards.length && (
-          <button
-            className='moviesCardList__button-else button-hover'
-            aria-label='in'
-            type='button'
-            onClick={addMovies}
-          >
-            Ещё
-          </button>
-        )}
+        {!pageSaveMovies &&
+          moviesCardList.props.children.length < cards.length && (
+            <button
+              className='moviesCardList__button-else button-hover'
+              aria-label='in'
+              type='button'
+              onClick={addMovies}
+            >
+              Ещё
+            </button>
+          )}
       </>
     </section>
   );
