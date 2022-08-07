@@ -66,10 +66,34 @@ function App() {
     });
   }, []);
 
+  // useEffect(() => {
+  //   Promise.all([mainApi.getUserInfo(), mainApi.getSaveCards()])
+  //     .then(([userData, saveCards]) => {
+  //       setCurrentUser(userData);
+  //       setInitialSavedCards(saveCards);
+  //       setSavedCards(saveCards);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       handleErrors(err);
+  //       console.log(err);
+  //     });
+  // }, []);
+
   useEffect(() => {
-    Promise.all([mainApi.getUserInfo(), mainApi.getSaveCards()])
-      .then(([userData, saveCards]) => {
+    mainApi.getUserInfo()
+      .then((userData) => {
         setCurrentUser(userData);
+      })
+      .catch((err) => {
+        handleErrors(err);
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    mainApi.getSaveCards()
+      .then((saveCards) => {
         setInitialSavedCards(saveCards);
         setSavedCards(saveCards);
       })
