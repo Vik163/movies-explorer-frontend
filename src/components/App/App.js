@@ -28,6 +28,7 @@ function App() {
   const [story, setStory] = useState({});
   const [storySavePage, setStorySavePage] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
+  const [errorNotFound, setErrorNotFound] = useState(false);
   const [errorPageMessage, setErrorPageMessage] = useState('');
   const [preloaderMessage, setPreloaderMessage] = useState('');
   const [preloaderMessageError, setPreloaderMessageError] = useState('');
@@ -42,7 +43,6 @@ function App() {
       .checkToken()
       .then((res) => {
         res && setLoggedIn(true);
-        history.push('/movies');
       })
       .catch((err) => {
         console.log(err);
@@ -50,11 +50,11 @@ function App() {
   };
 
   useEffect(() => {
-    !errorPageMessage && checkToken();
-  }, [loggedIn]);
+    checkToken();
+  }, []);
 
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedIn && !errorNotFound) {
       history.push('/movies');
     }
   }, [loggedIn]);
@@ -89,9 +89,9 @@ function App() {
         }
       })
       .catch((err) => {
-        handleErrors(err);
-        err.message === 'Ошибка: Bad Request' &&
-          setErrorMessage('При регистрации пользователя произошла ошибка');
+        err.message === 'Ошибка: Bad Request'
+          ? setErrorMessage('При регистрации пользователя произошла ошибка')
+          : handleErrors(err);
         console.log(err);
       });
   }
@@ -103,16 +103,14 @@ function App() {
         checkToken();
         setLoggedIn(true);
         setCurrentUser(data.user);
-        mainApi.getInitialCards().then((cards) => {
-          setCards(cards);
-          history.push('/movies');
-          setErrorMessage('');
-        });
+        setErrorMessage('');
+        history.push('/movies');
       })
       .catch((err) => {
-        handleErrors(err);
-        err.message === 'Ошибка: Bad Request' &&
-          setErrorMessage('При авторизации пользователя произошла ошибка');
+        console.log(err.message);
+        err.message === 'Ошибка: Bad Request'
+          ? setErrorMessage('При авторизации пользователя произошла ошибка')
+          : handleErrors(err);
         console.log(err);
       });
   }
@@ -138,9 +136,9 @@ function App() {
         setErrorMessage('Данные успешно обновлены! ');
       })
       .catch((err) => {
-        handleErrors(err);
-        err.message === 'Ошибка: Bad Request' &&
-          setErrorMessage('При обновлении профиля произошла ошибка');
+        err.message === 'Ошибка: Bad Request'
+          ? setErrorMessage('При обновлении профиля произошла ошибка')
+          : handleErrors(err);
         console.log(err);
       });
   }
@@ -152,7 +150,7 @@ function App() {
       err.message === 'Failed to fetch'
     ) {
       setErrorPageMessage(errorHandler(err));
-      history.push('/error');
+      history.push('*');
     }
     setErrorMessage(errorHandler(err));
   }
@@ -223,6 +221,7 @@ function App() {
       }
     });
     if (!(arr.length === 0)) {
+      setIsPreloader(false);
       setSavedCards(arr);
       setStorySavePage({
         isToggle: isToggle,
@@ -232,7 +231,6 @@ function App() {
     } else {
       setPreloaderMessage('Ничего не найдено');
     }
-    setIsPreloader(false);
   }
 
   function searchShortCards(isToggle, pageSaveMovies) {
@@ -297,6 +295,10 @@ function App() {
       });
   }
 
+  function addPageNotFound() {
+    setErrorNotFound(true);
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
@@ -310,54 +312,55 @@ function App() {
           <Route path='/sign-in'>
             <Login handleLogin={handleLogin} errorMessage={errorMessage} />
           </Route>
-          <Route path='/error'>
-            <ErrorPage errorPageMessage={errorPageMessage} />
-          </Route>
           <Route exact path='/'>
             <Header loggedIn={loggedIn} />
             <Main loggedIn={loggedIn} infoLink='Главная' />
             <Footer />
           </Route>
-          <ProtectedRoute path='/' loggedIn={loggedIn}>
-            <Route path='/profile'>
-              <Header loggedIn={loggedIn} />
-              <Profile
-                signOut={signOut}
-                handleUpdateUser={handleUpdateUser}
-                errorMessage={errorMessage}
-              />
-            </Route>
-            <Route path='/movies'>
-              <Header loggedIn={loggedIn} />
-              <Movies
-                cards={cards}
-                story={story}
-                searchCards={searchCards}
-                searchShortCards={searchShortCards}
-                addCard={addCard}
-                deleteCard={deleteCard}
-                savedCards={savedCards}
-                isPreloader={isPreloader}
-                preloaderMessage={preloaderMessage}
-                preloaderMessageError={preloaderMessageError}
-              />
-              <Footer />
-            </Route>
-            <Route path='/saved-movies'>
-              <Header loggedIn={loggedIn} />
-              <SavedMovies
-                savedCards={savedCards}
-                story={storySavePage}
-                deleteCard={deleteCard}
-                searchSaveCards={searchSaveCards}
-                searchShortCards={searchShortCards}
-                isPreloader={isPreloader}
-                preloaderMessage={preloaderMessage}
-                preloaderMessageError={preloaderMessageError}
-              />
-              <Footer />
-            </Route>
+          <ProtectedRoute path='/profile' loggedIn={loggedIn}>
+            <Header loggedIn={loggedIn} />
+            <Profile
+              signOut={signOut}
+              handleUpdateUser={handleUpdateUser}
+              errorMessage={errorMessage}
+            />
           </ProtectedRoute>
+          <ProtectedRoute path='/movies' loggedIn={loggedIn}>
+            <Header loggedIn={loggedIn} />
+            <Movies
+              cards={cards}
+              story={story}
+              searchCards={searchCards}
+              searchShortCards={searchShortCards}
+              addCard={addCard}
+              deleteCard={deleteCard}
+              savedCards={savedCards}
+              isPreloader={isPreloader}
+              preloaderMessage={preloaderMessage}
+              preloaderMessageError={preloaderMessageError}
+            />
+            <Footer />
+          </ProtectedRoute>
+          <ProtectedRoute path='/saved-movies' loggedIn={loggedIn}>
+            <Header loggedIn={loggedIn} />
+            <SavedMovies
+              savedCards={savedCards}
+              story={storySavePage}
+              deleteCard={deleteCard}
+              searchSaveCards={searchSaveCards}
+              searchShortCards={searchShortCards}
+              isPreloader={isPreloader}
+              preloaderMessage={preloaderMessage}
+              preloaderMessageError={preloaderMessageError}
+            />
+            <Footer />
+          </ProtectedRoute>
+          <Route path='*'>
+            <ErrorPage
+              errorPageMessage={errorPageMessage}
+              addPageNotFound={addPageNotFound}
+            />
+          </Route>
         </Switch>
       </div>
     </CurrentUserContext.Provider>
