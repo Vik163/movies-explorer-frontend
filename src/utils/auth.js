@@ -17,7 +17,6 @@ class Auth {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
       body: JSON.stringify({
         name: name,
         password: password,
@@ -32,7 +31,6 @@ class Auth {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
       body: JSON.stringify({
         password: password,
         email: email,
