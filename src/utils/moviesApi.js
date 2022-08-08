@@ -11,7 +11,7 @@ class MoviesApi {
     }
   }
 
-  searchCards() {
+  getCards() {
     return fetch(`https://api.nomoreparties.co/beatfilm-movies`, {
       headers: { 'Content-Type': 'application/json' },
       // credentials: 'include',

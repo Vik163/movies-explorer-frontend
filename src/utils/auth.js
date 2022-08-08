@@ -6,8 +6,9 @@ class Auth {
   _checkResponse(res) {
     if (res.ok) {
       return res.json();
+    } else {
+      throw new Error(`Ошибка: ${res.statusText}`);
     }
-    throw new Error(`Ошибка: ${res.statusText}`);
   }
 
   registration(name, password, email) {
@@ -16,6 +17,7 @@ class Auth {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({
         name: name,
         password: password,
@@ -62,7 +64,6 @@ class Auth {
 const baseUrl = `${window.location.protocol}${
   process.env.REACT_APP_API_URL || '//localhost:3001'
 }`;
-
 export const auth = new Auth({
   baseUrl: baseUrl,
 });
