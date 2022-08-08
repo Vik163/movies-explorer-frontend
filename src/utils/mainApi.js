@@ -77,9 +77,7 @@ class MainApi {
   }
 }
 
-const baseUrl = `${window.location.protocol}${
-  process.env.REACT_APP_API_URL || '//localhost:3001'
-}`;
+const baseUrl = `${process.env.REACT_APP_API_URL || '//localhost:3001'}`;
 
 export const mainApi = new MainApi({
   baseUrl: baseUrl,
