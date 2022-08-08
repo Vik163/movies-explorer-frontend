@@ -22,6 +22,7 @@ import { auth } from '../../utils/auth.js';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
+  // console.log(currentUser);
   const history = useHistory();
 
   const [loggedIn, setLoggedIn] = useState(false);
@@ -34,16 +35,16 @@ function App() {
   const [preloaderMessageError, setPreloaderMessageError] = useState('');
   const [isPreloader, setIsPreloader] = useState(false);
   const [initialSavedCards, setInitialSavedCards] = useState([]);
-  const [initialCards, setInitialCards] = useState([]);
+  const [storyCards, setStoryCards] = useState([]);
   const [cards, setCards] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
 
   const checkToken = () => {
-    const user = localStorage.getItem('user');
+    const jwt = localStorage.getItem('jwt');
 
-    if (user) {
+    if (jwt) {
       auth
-        .checkToken()
+        .checkToken(jwt)
         .then((res) => {
           res && setLoggedIn(true);
         })
@@ -64,20 +65,20 @@ function App() {
   }, [loggedIn]);
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const jwt = localStorage.getItem('jwt');
 
-    if (user) {
+    if (jwt) {
       moviesApi.getCards().then((cards) => {
-        setInitialCards(cards);
+        setStoryCards(cards);
         setCards(cards);
       });
     }
   }, []);
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const jwt = localStorage.getItem('jwt');
 
-    if (user) {
+    if (jwt) {
       Promise.all([mainApi.getUserInfo(), mainApi.getSaveCards()])
         .then(([userData, saveCards]) => {
           setCurrentUser(userData);
@@ -89,16 +90,14 @@ function App() {
           console.log(err);
         });
     }
-  }, []);
+  }, [loggedIn]);
 
   function handleRegister({ name, password, email }) {
     return auth
       .registration(name, password, email)
       .then((res) => {
         if (res) {
-          setLoggedIn(true);
-          history.push('/movies');
-          setErrorMessage('');
+          handleLogin({ password, email });
         }
       })
       .catch((err) => {
@@ -113,10 +112,10 @@ function App() {
     return auth
       .authorization(password, email)
       .then((data) => {
-        checkToken();
-        localStorage.setItem('user', data);
+        localStorage.setItem('jwt', data.token);
         setLoggedIn(true);
         setCurrentUser(data.user);
+        checkToken();
         setErrorMessage('');
         history.push('/movies');
       })
@@ -130,18 +129,12 @@ function App() {
   }
 
   function signOut() {
-    localStorage.removeItem('user');
+    localStorage.removeItem('jwt');
 
-    return auth
-      .signOut()
-      .then(() => {
-        setLoggedIn(false);
+    setLoggedIn(false);
+    setCurrentUser({});
 
-        history.push('/');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    history.push('/');
   }
 
   function handleUpdateUser(obj) {
@@ -251,7 +244,7 @@ function App() {
 
   function searchShortCards(isToggle, pageSaveMovies) {
     setIsPreloader(true);
-    const arrCards = pageSaveMovies ? savedCards : initialCards;
+    const arrCards = pageSaveMovies ? savedCards : storyCards;
 
     pageSaveMovies
       ? setStorySavePage({

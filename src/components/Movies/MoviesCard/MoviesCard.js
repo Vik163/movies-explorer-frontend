@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 
 import './MoviesCard.css';
 
@@ -6,8 +7,14 @@ function MoviesCard(props) {
   const { card, isMobile, deleteCard, addCard, savedCards, pageSaveMovies } =
     props;
 
+  const currentUser = React.useContext(CurrentUserContext);
+
   const isLiked = useCallback(() => {
-    return savedCards.some((i) => i.nameRU === card.nameRU);
+    return savedCards.some(
+      (i) =>
+        i.movieId === card.movieId ||
+        (i.owner === currentUser._id && i.movieId === card.id)
+    );
   }, [savedCards]);
 
   const iconSavedMovies = pageSaveMovies

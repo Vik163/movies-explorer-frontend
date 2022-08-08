@@ -15,8 +15,8 @@ class MainApi {
     return fetch(`${this._settings.baseUrl}/users/me`, {
       headers: {
         'Content-Type': 'application/json',
+        authorization: localStorage.getItem('jwt'),
       },
-      credentials: 'include',
     }).then(this._checkResponse);
   }
 
@@ -24,8 +24,8 @@ class MainApi {
     return fetch(`${this._settings.baseUrl}/movies`, {
       headers: {
         'Content-Type': 'application/json',
+        authorization: localStorage.getItem('jwt'),
       },
-      credentials: 'include',
     }).then(this._checkResponse);
   }
 
@@ -34,8 +34,8 @@ class MainApi {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        authorization: localStorage.getItem('jwt'),
       },
-      credentials: 'include',
       body: JSON.stringify({
         country: card.country,
         director: card.director,
@@ -57,8 +57,8 @@ class MainApi {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        authorization: localStorage.getItem('jwt'),
       },
-      credentials: 'include',
     }).then(this._checkResponse);
   }
 
@@ -67,8 +67,8 @@ class MainApi {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        authorization: localStorage.getItem('jwt'),
       },
-      credentials: 'include',
       body: JSON.stringify({
         name: formValues.name,
         email: formValues.email,
@@ -77,8 +77,8 @@ class MainApi {
   }
 }
 
-const baseUrl = `https:${process.env.REACT_APP_API_URL || '//localhost:3001'}`;
+const baseUrl = `${process.env.REACT_APP_API_URL || '//localhost:3001'}`;
 
 export const mainApi = new MainApi({
-  baseUrl: baseUrl,
+  baseUrl: 'http://localhost:3001',
 });

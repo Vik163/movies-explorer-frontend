@@ -38,23 +38,13 @@ class Auth {
     }).then(this._checkResponse);
   }
 
-  checkToken() {
+  checkToken(jwt) {
     return fetch(`${this._settings.baseUrl}/users/me`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        authorization: jwt,
       },
-      credentials: 'include',
-    }).then(this._checkResponse);
-  }
-
-  signOut() {
-    return fetch(`${this._settings.baseUrl}/signout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
     }).then(this._checkResponse);
   }
 }
@@ -63,5 +53,5 @@ const baseUrl = `${window.location.protocol}${
   process.env.REACT_APP_API_URL || '//localhost:3001'
 }`;
 export const auth = new Auth({
-  baseUrl: baseUrl,
+  baseUrl: 'http://localhost:3001',
 });
