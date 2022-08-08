@@ -80,5 +80,5 @@ class MainApi {
 const baseUrl = `${process.env.REACT_APP_API_URL || '//localhost:3001'}`;
 
 export const mainApi = new MainApi({
-  baseUrl: 'http://localhost:3001',
+  baseUrl: baseUrl,
 });
