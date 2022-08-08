@@ -12,7 +12,7 @@ class MainApi {
   }
 
   getUserInfo() {
-    return fetch(`${this._settings.baseUrl}/users/me`, {
+    return fetch(`${this._settings.baseUrl}/users/me/`, {
       headers: {
         'Content-Type': 'application/json',
         authorization: localStorage.getItem('jwt'),
@@ -22,7 +22,7 @@ class MainApi {
   }
 
   getSaveCards() {
-    return fetch(`${this._settings.baseUrl}/movies`, {
+    return fetch(`${this._settings.baseUrl}/movies/`, {
       headers: {
         'Content-Type': 'application/json',
         authorization: localStorage.getItem('jwt'),
@@ -32,7 +32,7 @@ class MainApi {
   }
 
   addCard(card) {
-    return fetch(`${this._settings.baseUrl}/movies`, {
+    return fetch(`${this._settings.baseUrl}/movies/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ class MainApi {
   }
 
   deleteCard(obj) {
-    return fetch(`${this._settings.baseUrl}/movies/${obj._id}`, {
+    return fetch(`${this._settings.baseUrl}/movies/${obj._id}/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ class MainApi {
   }
 
   sendInfoProfile(formValues) {
-    return fetch(`${this._settings.baseUrl}/users/me`, {
+    return fetch(`${this._settings.baseUrl}/users/me/`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
