@@ -12,7 +12,7 @@ class Auth {
   }
 
   registration(name, password, email) {
-    return fetch(`${this._settings.baseUrl}/signup/`, {
+    return fetch(`${this._settings.baseUrl}/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ class Auth {
   }
 
   authorization(password, email) {
-    return fetch(`${this._settings.baseUrl}/signin/`, {
+    return fetch(`${this._settings.baseUrl}/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ class Auth {
   }
 
   checkToken(jwt) {
-    return fetch(`${this._settings.baseUrl}/users/me/`, {
+    return fetch(`${this._settings.baseUrl}/users/me`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -57,4 +57,7 @@ const baseUrl = `${window.location.protocol}${
 }`;
 export const auth = new Auth({
   baseUrl: baseUrl,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
