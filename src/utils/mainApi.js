@@ -17,6 +17,7 @@ class MainApi {
         'Content-Type': 'application/json',
         authorization: localStorage.getItem('jwt'),
       },
+      credentials: 'include',
     }).then(this._checkResponse);
   }
 
@@ -26,6 +27,7 @@ class MainApi {
         'Content-Type': 'application/json',
         authorization: localStorage.getItem('jwt'),
       },
+      credentials: 'include',
     }).then(this._checkResponse);
   }
 
@@ -36,6 +38,7 @@ class MainApi {
         'Content-Type': 'application/json',
         authorization: localStorage.getItem('jwt'),
       },
+      credentials: 'include',
       body: JSON.stringify({
         country: card.country,
         director: card.director,
@@ -59,6 +62,7 @@ class MainApi {
         'Content-Type': 'application/json',
         authorization: localStorage.getItem('jwt'),
       },
+      credentials: 'include',
     }).then(this._checkResponse);
   }
 
@@ -69,6 +73,7 @@ class MainApi {
         'Content-Type': 'application/json',
         authorization: localStorage.getItem('jwt'),
       },
+      credentials: 'include',
       body: JSON.stringify({
         name: formValues.name,
         email: formValues.email,
