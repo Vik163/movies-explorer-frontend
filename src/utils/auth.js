@@ -12,12 +12,12 @@ class Auth {
   }
 
   registration(name, password, email) {
+console.log('i');
     return fetch(`${this._settings.baseUrl}/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
       body: JSON.stringify({
         name: name,
         password: password,
@@ -32,7 +32,6 @@ class Auth {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
       body: JSON.stringify({
         password: password,
         email: email,
@@ -47,7 +46,6 @@ class Auth {
         'Content-Type': 'application/json',
         authorization: jwt,
       },
-      credentials: 'include',
     }).then(this._checkResponse);
   }
 }
