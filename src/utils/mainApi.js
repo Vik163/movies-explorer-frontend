@@ -15,6 +15,7 @@ class MainApi {
     return fetch(`${this._settings.baseUrl}/users/me`, {
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
         authorization: localStorage.getItem('jwt'),
       },
     }).then(this._checkResponse);

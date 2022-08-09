@@ -73,7 +73,7 @@ function App() {
         setCards(cards);
       });
     }
-  }, []);
+  }, [loggedIn]);
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
@@ -115,7 +115,6 @@ function App() {
         localStorage.setItem('jwt', data.token);
         setLoggedIn(true);
         setCurrentUser(data.user);
-        checkToken();
         setErrorMessage('');
         history.push('/movies');
       })

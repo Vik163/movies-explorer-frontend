@@ -12,7 +12,6 @@ class Auth {
   }
 
   registration(name, password, email) {
-console.log('i');
     return fetch(`${this._settings.baseUrl}/signup`, {
       method: 'POST',
       headers: {
@@ -55,7 +54,4 @@ const baseUrl = `${window.location.protocol}${
 }`;
 export const auth = new Auth({
   baseUrl: baseUrl,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
