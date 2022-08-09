@@ -12,3 +12,4 @@
  сервер - vik@84.201.152.168
  домен - vik.diplom.nomoredomains.xyz
 * [Ссылка на страницу](https://vik.diplom.nomoredomains.xyz)
+* [Ссылка на pull requests](https://github.com/Vik163/movies-explorer-frontend/pull/2)
