@@ -22,7 +22,6 @@ import { auth } from '../../utils/auth.js';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
-  // console.log(currentUser);
   const history = useHistory();
 
   const [loggedIn, setLoggedIn] = useState(false);
@@ -55,11 +54,7 @@ function App() {
   };
 
   useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
-
-    if (jwt) {
     checkToken();
-    }
   }, []);
 
   useEffect(() => {
@@ -123,7 +118,6 @@ function App() {
         history.push('/movies');
       })
       .catch((err) => {
-        console.log(err.message);
         err.message === 'Ошибка: Bad Request'
           ? setErrorMessage('При авторизации пользователя произошла ошибка')
           : handleErrors(err);

@@ -100,8 +100,7 @@ function Login(props) {
             value={values.password ?? ''}
             placeholder='Пароль'
             name='password'
-            minLength='4'
-            maxLength='8'
+            minLength='6'
             required
           />
           {isName === 'password' && (
@@ -121,9 +120,7 @@ function Login(props) {
           Войти
         </button>
       </form>
-      <span className='register__error-login'>
-        {props.errorMessage}
-      </span>
+      <span className='register__error-login'>{props.errorMessage}</span>
       <div className='register__caption'>
         <span>Ещё не зарегистрированы?</span>
         <Link className='register__caption-link button-hover' to='/sign-up'>

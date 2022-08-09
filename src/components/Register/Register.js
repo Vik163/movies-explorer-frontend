@@ -128,8 +128,7 @@ function Register(props) {
             value={values.password ?? ''}
             placeholder='Пароль'
             name='password'
-            minLength='4'
-            maxLength='8'
+            minLength='6'
             required
           />
           {isName === 'password' && (
