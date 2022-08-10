@@ -15,6 +15,7 @@ function Login(props) {
     password: false,
   });
 
+  //Ввод данных и валидация
   const handleChange = (event) => {
     const target = event.target;
     const value = target.value;
@@ -28,6 +29,7 @@ function Login(props) {
     });
   };
 
+  //Отлючение кнопки submit
   const hasInvalidInputs = () => {
     let arr = [];
 
@@ -81,6 +83,7 @@ function Login(props) {
             name='email'
             required
           />
+          {/* Показать ошибку валидации */}
           {isName === 'email' && (
             <span
               className='register__input-error'

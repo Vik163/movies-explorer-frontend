@@ -52,6 +52,7 @@ function Header(props) {
     </div>
   );
 
+  //Контроль размера страницы
   useEffect(() => {
     const handler = (e) => setIsDesktop(e.matches);
     window.matchMedia('(min-width: 780px)').addEventListener('change', handler);
@@ -61,6 +62,7 @@ function Header(props) {
         .removeEventListener('change', handler);
   }, []);
 
+  //Установка формы кнопки навигации
   useEffect(() => {
     isToggle
       ? setIsAddInfo({ display: 'flex', src: closeIcon })
@@ -76,6 +78,7 @@ function Header(props) {
       <Link className='button-hover' to='/'>
         <img className='header__logo' src={headerLogo} alt='Логотип' />
       </Link>
+      {/*Форма навигации в зависимости от авторизации и размера*/}
       {!props.loggedIn ? (
         <div>{headerRegister}</div>
       ) : isDesktop ? (

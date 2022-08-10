@@ -9,6 +9,7 @@ function MoviesCard(props) {
 
   const currentUser = React.useContext(CurrentUserContext);
 
+  //Поиск сохранненых карточек
   const isLiked = useCallback(() => {
     return savedCards.some(
       (i) =>
@@ -17,6 +18,7 @@ function MoviesCard(props) {
     );
   }, [savedCards]);
 
+  //Установка иконок сохраненным фильмам
   const iconSavedMovies = pageSaveMovies
     ? 'moviesCard__icon_delete'
     : 'moviesCard__icon_active';
@@ -42,6 +44,7 @@ function MoviesCard(props) {
   return (
     <li className='moviesCard'>
       <a href={props.card.trailerLink}>
+        {/* Оптимизация изображения*/}
         <img
           className='moviesCard__image button-hover'
           src={

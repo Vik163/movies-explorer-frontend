@@ -7,6 +7,7 @@ import Card from '../MoviesCard/MoviesCard.js';
 function MoviesCardList(props) {
   const { cards, deleteCard, addCard, savedCards, pageSaveMovies } = props;
 
+  //Кнопка ещё
   const [isDesktop, setIsDesktop] = useState(
     window.matchMedia('(min-width: 928px)').matches
   );
@@ -15,24 +16,6 @@ function MoviesCardList(props) {
   );
   const index = (isDesktop && 12) || (isMobile && 5) || 8;
   const [indexArray, setIndexArray] = useState(index);
-
-  const moviesCardList = (
-    <ul className='moviesCardList__container'>
-      {cards
-        .map((card) => (
-          <Card
-            card={card}
-            key={card.id || card._id}
-            isMobile={isMobile}
-            addCard={addCard}
-            deleteCard={deleteCard}
-            savedCards={savedCards}
-            pageSaveMovies={pageSaveMovies}
-          />
-        ))
-        .slice(0, !pageSaveMovies ? indexArray : 1000)}
-    </ul>
-  );
 
   useEffect(() => {
     setIndexArray(index);
@@ -59,6 +42,24 @@ function MoviesCardList(props) {
   const addMovies = () => {
     isDesktop ? setIndexArray(indexArray + 3) : setIndexArray(indexArray + 2);
   };
+
+  const moviesCardList = (
+    <ul className='moviesCardList__container'>
+      {cards
+        .map((card) => (
+          <Card
+            card={card}
+            key={card.id || card._id}
+            isMobile={isMobile}
+            addCard={addCard}
+            deleteCard={deleteCard}
+            savedCards={savedCards}
+            pageSaveMovies={pageSaveMovies}
+          />
+        ))
+        .slice(0, !pageSaveMovies ? indexArray : 1000)}
+    </ul>
+  );
 
   return (
     <section className='moviesCardList'>

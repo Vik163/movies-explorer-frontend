@@ -42,6 +42,7 @@ function Profile(props) {
     });
   };
 
+  //Поиск сравнения вводимых данных, данным зарегистророванного пользователя
   useEffect(() => {
     if (
       values.name === currentUser.name &&
@@ -97,6 +98,7 @@ function Profile(props) {
             disabled={inputDisabled}
             required
           />
+          {/* Показать ошибку валидации */}
           {isName === 'name' && (
             <span className='profile__input-error' style={{ display: 'block' }}>
               {errors.name}

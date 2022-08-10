@@ -149,6 +149,7 @@ function App() {
       });
   }
 
+  //Сортировка отправки ошибок
   function handleErrors(err) {
     if (
       err.message === 'Ошибка: 404' ||
@@ -161,6 +162,7 @@ function App() {
     setErrorMessage(errorHandler(err));
   }
 
+  //Поиск в несохраненных картах
   function searchCards(value, isToggle) {
     setIsPreloader(true);
     moviesApi
@@ -169,6 +171,7 @@ function App() {
         if (cards) {
           const arr = cards.filter((item) => {
             if (item.nameRU && item.nameEN) {
+              //Переключатель - короткометражки
               if (isToggle) {
                 if (item.duration < 40) {
                   return (
@@ -188,6 +191,7 @@ function App() {
             setIsPreloader(false);
             setCards(arr);
             setStory({
+              //История поиска
               isToggle: isToggle,
               value: value,
               arr: arr,
@@ -206,6 +210,7 @@ function App() {
       });
   }
 
+  //Поиск сохраненных карт
   function searchSaveCards(value, isToggle) {
     setIsPreloader(true);
 
@@ -239,6 +244,7 @@ function App() {
     }
   }
 
+  //Отбор короткометражек
   function searchShortCards(isToggle, pageSaveMovies) {
     setIsPreloader(true);
     const arrCards = pageSaveMovies ? savedCards : storyCards;
