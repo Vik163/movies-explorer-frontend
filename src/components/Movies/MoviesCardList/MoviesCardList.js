@@ -5,7 +5,14 @@ import './MoviesCardList.css';
 import Card from '../MoviesCard/MoviesCard.js';
 
 function MoviesCardList(props) {
-  const { cards, deleteCard, addCard, savedCards, pageSaveMovies } = props;
+  const {
+    cards,
+    deleteCard,
+    addCard,
+    savedCards,
+    pageSaveMovies,
+    initialSavedCards,
+  } = props;
 
   //Кнопка ещё
   const [isDesktop, setIsDesktop] = useState(
@@ -52,12 +59,17 @@ function MoviesCardList(props) {
             key={card.id || card._id}
             isMobile={isMobile}
             addCard={addCard}
+            initialSavedCards={initialSavedCards}
             deleteCard={deleteCard}
             savedCards={savedCards}
             pageSaveMovies={pageSaveMovies}
           />
         ))
-        .slice(0, !pageSaveMovies ? indexArray : 1000)}
+        .slice(
+          0,
+          !pageSaveMovies ? indexArray : 1000
+          // 2
+        )}
     </ul>
   );
 

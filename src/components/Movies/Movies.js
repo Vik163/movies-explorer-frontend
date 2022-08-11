@@ -5,10 +5,14 @@ import Preloader from './Preloader/Preloader.js';
 import MoviesCardList from './MoviesCardList/MoviesCardList.js';
 
 function Movies(props) {
+  const pageSaveMovies = false;
+
   const {
     cards,
     story,
     searchCards,
+    getInitialCards,
+    initialSavedCards,
     searchShortCards,
     isPreloader,
     deleteCard,
@@ -22,6 +26,7 @@ function Movies(props) {
     <main className='main'>
       <SearchForm
         searchCards={searchCards}
+        getInitialCards={getInitialCards}
         story={story}
         searchShortCards={searchShortCards}
       />
@@ -33,7 +38,9 @@ function Movies(props) {
       ) : (
         <MoviesCardList
           cards={cards}
+          pageSaveMovies={pageSaveMovies}
           deleteCard={deleteCard}
+          initialSavedCards={initialSavedCards}
           addCard={addCard}
           savedCards={savedCards}
           story={story}

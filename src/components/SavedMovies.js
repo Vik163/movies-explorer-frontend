@@ -14,6 +14,7 @@ function SavedMovies(props) {
     searchShortCards,
     deleteCard,
     isPreloader,
+    initialSavedCards,
     preloaderMessage,
     preloaderMessageError,
   } = props;
@@ -34,6 +35,7 @@ function SavedMovies(props) {
       ) : (
         <MoviesCardList
           savedCards={savedCards}
+          initialSavedCards={initialSavedCards}
           cards={savedCards}
           pageSaveMovies={pageSaveMovies}
           deleteCard={deleteCard}

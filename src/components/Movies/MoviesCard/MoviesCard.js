@@ -4,19 +4,30 @@ import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 import './MoviesCard.css';
 
 function MoviesCard(props) {
-  const { card, isMobile, deleteCard, addCard, savedCards, pageSaveMovies } =
-    props;
+  const {
+    card,
+    isMobile,
+    deleteCard,
+    addCard,
+    savedCards,
+    initialSavedCards,
+    pageSaveMovies,
+  } = props;
+
+  console.log(card);
 
   const currentUser = React.useContext(CurrentUserContext);
+  console.log(initialSavedCards);
 
   //Поиск сохранненых карточек
   const isLiked = useCallback(() => {
-    return savedCards.some(
+    return initialSavedCards.some(
       (i) =>
         i.movieId === card.movieId ||
         (i.owner === currentUser._id && i.movieId === card.id)
     );
-  }, [savedCards]);
+  }, [savedCards, pageSaveMovies]);
+  console.log(savedCards);
 
   //Установка иконок сохраненным фильмам
   const iconSavedMovies = pageSaveMovies

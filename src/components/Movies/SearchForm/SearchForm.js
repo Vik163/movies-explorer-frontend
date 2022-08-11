@@ -6,6 +6,7 @@ import './FilterCheckbox.css';
 function SearchForm(props) {
   const {
     searchCards,
+    getInitialCards,
     story,
     searchShortCards,
     pageSaveMovies,
@@ -20,13 +21,9 @@ function SearchForm(props) {
     setIsError(e.target.validationMessage);
   };
 
-  useEffect(() => {
-    isError && setIsError(true);
-  }, [isError]);
-
   // история формы поиска
   useEffect(() => {
-    if (!(story === {})) {
+    if (!(story === {} || story === null)) {
       setIsToggle(story.isToggle);
       setValue(story.value);
     }
@@ -37,6 +34,7 @@ function SearchForm(props) {
 
     if (!value) {
       setIsError(true);
+      getInitialCards();
     } else {
       if (pageSaveMovies) {
         searchSaveCards(value, isToggle);
@@ -44,6 +42,21 @@ function SearchForm(props) {
         searchCards(value, isToggle);
         resetForm();
       }
+    }
+  };
+
+  const resetInput = () => {
+    if (value) {
+      localStorage.setItem(
+        'saveCards',
+        JSON.stringify({
+          isToggle: false,
+          value: '',
+          arr: story.arr,
+        })
+      );
+      setIsToggle(false);
+      setValue('');
     }
   };
 
@@ -67,6 +80,7 @@ function SearchForm(props) {
           minLength='2'
           onChange={handleChange}
           value={value ?? ''}
+          onClick={resetInput}
           required
         />
         {isError && (

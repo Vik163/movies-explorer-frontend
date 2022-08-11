@@ -9,38 +9,46 @@ function Profile(props) {
 
   const [isToggle, setIsToggle] = useState(false);
   const [isName, setIsName] = useState('');
-  const [values, setValues] = React.useState({});
-  const [errors, setErrors] = React.useState({});
-  const [errorUser, setErrorUser] = React.useState('');
-  const [disabled, setDisabled] = React.useState(true);
-  const [inputDisabled, setInputDisabled] = useState(true);
-  const [isInputsValid, setIsInputsValid] = React.useState({
-    name: false,
-    email: false,
+  const [values, setValues] = React.useState({
+    name: '',
+    email: '',
   });
+  const [errorUser, setErrorUser] = React.useState('');
+  const [inputDisabled, setInputDisabled] = useState(true);
+  const [errors, setErrors] = React.useState({
+    name: '',
+  });
+  const [target, setTarget] = React.useState({});
+  const [disabled, setDisabled] = React.useState(true);
+  const [emailValid, setEmailValid] = React.useState(false);
+  const [nameValid, setNameValid] = React.useState(false);
+
+  //Ввод данных и валидация
   const handleChange = (event) => {
+    setTarget(event.target);
     const target = event.target;
     const value = target.value;
     const name = target.name;
     setIsName(name);
     setValues({ ...values, [name]: value });
-    setErrors({ ...errors, [name]: target.validationMessage });
-    setIsInputsValid({
-      ...isInputsValid,
-      [name]: target.closest('input').checkValidity(),
-    });
   };
 
-  const hasInvalidInputs = () => {
-    let arr = [];
-
-    for (let bool in isInputsValid) {
-      arr.push(isInputsValid[bool]);
+  useEffect(() => {
+    if (values.email) {
+      if (values.email.match(/^[\w]{1}[\w-.]*@[\w-]+\.[a-z]{2,4}$/i) === null) {
+        setEmailValid({
+          valid: false,
+          message: 'Некорректный адрес электронной почты ',
+        });
+      } else {
+        setEmailValid({ valid: true });
+      }
     }
-    return arr.some((item) => {
-      return item === false;
-    });
-  };
+    if (target.name === 'name') {
+      setNameValid(target.closest('input').checkValidity());
+      setErrors({ ...errors, [target.name]: target.validationMessage });
+    }
+  }, [values]);
 
   //Поиск сравнения вводимых данных, данным зарегистророванного пользователя
   useEffect(() => {
@@ -52,19 +60,20 @@ function Profile(props) {
       setDisabled(true);
     } else {
       setErrorUser('');
-      setDisabled(hasInvalidInputs());
+
+      if (emailValid.valid && nameValid) {
+        setDisabled(false);
+      } else {
+        setDisabled(true);
+      }
     }
-  }, [values]);
+  }, [values, errors]);
 
   const resetForm = useCallback(() => {
     setValues({});
     setErrors({});
-    setIsInputsValid({
-      name: false,
-      email: false,
-    });
     setDisabled(true);
-  }, [setValues, setErrors, setIsInputsValid, setDisabled]);
+  }, [setValues, setErrors, setDisabled]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -76,6 +85,10 @@ function Profile(props) {
   const toggle = () => {
     setIsToggle(!isToggle);
     setInputDisabled(false);
+    setValues({
+      name: currentUser.name,
+      email: currentUser.email,
+    });
   };
 
   return (
@@ -90,8 +103,8 @@ function Profile(props) {
             id='name'
             type='text'
             onChange={handleChange}
-            value={values.name ?? ''}
-            placeholder='Имя'
+            value={values.name ?? currentUser.name}
+            placeholder={currentUser.name}
             name='name'
             minLength='2'
             maxLength='30'
@@ -112,15 +125,15 @@ function Profile(props) {
             id='email'
             type='email'
             onChange={handleChange}
-            value={values.email ?? ''}
-            placeholder='Email'
+            value={values.email ?? currentUser.name}
+            placeholder={currentUser.email}
             name='email'
             disabled={inputDisabled}
             required
           />
           {isName === 'email' && (
             <span className='profile__input-error' style={{ display: 'block' }}>
-              {errors.email}
+              {emailValid.message}
             </span>
           )}
         </label>

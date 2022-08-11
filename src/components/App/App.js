@@ -25,8 +25,7 @@ function App() {
   const history = useHistory();
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const [story, setStory] = useState({});
-  const [storySavePage, setStorySavePage] = useState({});
+
   const [errorMessage, setErrorMessage] = useState('');
   const [errorNotFound, setErrorNotFound] = useState(false);
   const [errorPageMessage, setErrorPageMessage] = useState('');
@@ -34,8 +33,15 @@ function App() {
   const [preloaderMessageError, setPreloaderMessageError] = useState('');
   const [isPreloader, setIsPreloader] = useState(false);
   const [initialSavedCards, setInitialSavedCards] = useState([]);
+  // console.log(initialSavedCards);
+  const [story, setStory] = useState(
+    JSON.parse(localStorage.getItem('saveCards'))
+  );
+  const [storySavePage, setStorySavePage] = useState({});
   const [storyCards, setStoryCards] = useState([]);
+  // console.log(storyCards);
   const [cards, setCards] = useState([]);
+  // console.log(cards);
   const [savedCards, setSavedCards] = useState([]);
 
   const checkToken = () => {
@@ -67,12 +73,26 @@ function App() {
     const jwt = localStorage.getItem('jwt');
 
     if (jwt) {
-      moviesApi.getCards().then((cards) => {
-        setStoryCards(cards);
-        setCards(cards);
-      });
+      if (story === {} || story === null) {
+        moviesApi.getCards().then((cards) => {
+          setCards(cards);
+          setStoryCards(cards);
+        });
+      } else {
+        setCards(story.arr);
+      }
     }
   }, [loggedIn]);
+
+  function getInitialCards() {
+    const jwt = localStorage.getItem('jwt');
+    console.log('i');
+    if (jwt) {
+      localStorage.removeItem('saveCards');
+      setStory({});
+      setCards(storyCards);
+    }
+  }
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
@@ -127,7 +147,9 @@ function App() {
 
   function signOut() {
     localStorage.removeItem('jwt');
+    localStorage.removeItem('saveCards');
 
+    setStory({});
     setLoggedIn(false);
     setCurrentUser({});
 
@@ -190,12 +212,15 @@ function App() {
           if (!(arr.length === 0)) {
             setIsPreloader(false);
             setCards(arr);
-            setStory({
-              //История поиска
-              isToggle: isToggle,
-              value: value,
-              arr: arr,
-            });
+            localStorage.setItem(
+              'saveCards',
+              JSON.stringify({
+                isToggle: isToggle,
+                value: value,
+                arr: arr,
+              })
+            );
+            setStory(JSON.parse(localStorage.getItem('saveCards')));
           } else {
             setPreloaderMessage('Ничего не найдено');
           }
@@ -234,11 +259,6 @@ function App() {
     if (!(arr.length === 0)) {
       setIsPreloader(false);
       setSavedCards(arr);
-      setStorySavePage({
-        isToggle: isToggle,
-        value: value,
-        arr: arr,
-      });
     } else {
       setPreloaderMessage('Ничего не найдено');
     }
@@ -263,13 +283,7 @@ function App() {
       });
       if (!(arr.length === 0)) {
         setIsPreloader(false);
-        story.arr
-          ? pageSaveMovies
-            ? setSavedCards(story.arr)
-            : setCards(story.arr)
-          : pageSaveMovies
-          ? setSavedCards(arr)
-          : setCards(arr);
+        pageSaveMovies ? setSavedCards(arr) : setCards(arr);
       } else {
         setPreloaderMessage('Ничего не найдено');
       }
@@ -342,10 +356,12 @@ function App() {
             <Movies
               cards={cards}
               story={story}
+              getInitialCards={getInitialCards}
               searchCards={searchCards}
               searchShortCards={searchShortCards}
               addCard={addCard}
               deleteCard={deleteCard}
+              initialSavedCards={initialSavedCards}
               savedCards={savedCards}
               isPreloader={isPreloader}
               preloaderMessage={preloaderMessage}
@@ -360,6 +376,7 @@ function App() {
               story={storySavePage}
               deleteCard={deleteCard}
               searchSaveCards={searchSaveCards}
+              initialSavedCards={initialSavedCards}
               searchShortCards={searchShortCards}
               isPreloader={isPreloader}
               preloaderMessage={preloaderMessage}

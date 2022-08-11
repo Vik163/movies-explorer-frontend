@@ -15,7 +15,6 @@ class MainApi {
     return fetch(`${this._settings.baseUrl}/users/me`, {
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
         authorization: localStorage.getItem('jwt'),
       },
     }).then(this._checkResponse);
@@ -83,5 +82,5 @@ const baseUrl = `${window.location.protocol}${
 }`;
 
 export const mainApi = new MainApi({
-  baseUrl: baseUrl,
+  baseUrl: 'http://localhost:3001',
 });

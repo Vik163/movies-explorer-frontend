@@ -7,53 +7,55 @@ import registerLogo from '../images/logo.svg';
 
 function Login(props) {
   const [isName, setIsName] = useState('');
-  const [values, setValues] = React.useState({ email: '', password: '' });
-  const [errors, setErrors] = React.useState({});
-  const [disabled, setDisabled] = React.useState(true);
-  const [isInputsValid, setIsInputsValid] = React.useState({
-    email: false,
-    password: false,
+  const [values, setValues] = React.useState(false);
+  const [errors, setErrors] = React.useState({
+    password: '',
   });
+  const [target, setTarget] = React.useState({});
+  const [disabled, setDisabled] = React.useState(true);
+  const [emailValid, setEmailValid] = React.useState(false);
+  const [passwordValid, setPasswordValid] = React.useState(false);
 
   //Ввод данных и валидация
   const handleChange = (event) => {
+    setTarget(event.target);
     const target = event.target;
     const value = target.value;
     const name = target.name;
     setIsName(name);
     setValues({ ...values, [name]: value });
-    setErrors({ ...errors, [name]: target.validationMessage });
-    setIsInputsValid({
-      ...isInputsValid,
-      [name]: target.closest('input').checkValidity(),
-    });
-  };
-
-  //Отлючение кнопки submit
-  const hasInvalidInputs = () => {
-    let arr = [];
-
-    for (let bool in isInputsValid) {
-      arr.push(isInputsValid[bool]);
-    }
-    return arr.some((item) => {
-      return item === false;
-    });
   };
 
   useEffect(() => {
-    setDisabled(hasInvalidInputs());
-  }, [errors]);
+    if (values.email) {
+      if (values.email.match(/^[\w]{1}[\w-.]*@[\w-]+\.[a-z]{2,4}$/i) === null) {
+        setEmailValid({
+          valid: false,
+          message: 'Некорректный адрес электронной почты ',
+        });
+      } else {
+        setEmailValid({ valid: true });
+      }
+    }
+    if (target.name === 'password') {
+      setPasswordValid(target.closest('input').checkValidity());
+      setErrors({ ...errors, [target.name]: target.validationMessage });
+    }
+  }, [values]);
+
+  useEffect(() => {
+    if (emailValid.valid && passwordValid) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [emailValid, passwordValid]);
 
   const resetForm = useCallback(() => {
     setValues({ email: '', password: '' });
     setErrors({});
-    setIsInputsValid({
-      email: false,
-      password: false,
-    });
     setDisabled(true);
-  }, [setValues, setErrors, setIsInputsValid, setDisabled]);
+  }, [setValues, setErrors, setDisabled]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -89,7 +91,7 @@ function Login(props) {
               className='register__input-error'
               style={{ display: 'block' }}
             >
-              {errors.email}
+              {emailValid.message}
             </span>
           )}
         </label>
