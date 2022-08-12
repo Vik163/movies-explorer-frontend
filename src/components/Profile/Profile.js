@@ -20,9 +20,7 @@ function Profile(props) {
   });
   const [inputEventTarget, setInputEventTarget] = React.useState({});
   const [disabled, setDisabled] = React.useState(true);
-  // console.log(disabled);
   const [emailValid, setEmailValid] = React.useState(false);
-  const [nameValid, setNameValid] = React.useState(false);
 
   //Ввод данных и валидация
   const handleChange = (event) => {
@@ -35,6 +33,26 @@ function Profile(props) {
   };
 
   useEffect(() => {
+    if (values.email) {
+      if (values.email.match(/^[\w]{1}[\w-.]*@[\w-]+\.[a-z]{1,4}$/i) === null) {
+        setEmailValid({
+          valid: false,
+          message: 'Некорректный адрес электронной почты ',
+        });
+      } else {
+        setEmailValid({ valid: true });
+      }
+    }
+    if (inputEventTarget.name === 'name') {
+      setErrors({
+        ...errors,
+        [inputEventTarget.name]: inputEventTarget.validationMessage,
+      });
+    }
+  }, [values]);
+
+  //Поиск сравнения вводимых данных, данным зарегистророванного пользователя
+  useEffect(() => {
     if (
       values.name === currentUser.name &&
       values.email === currentUser.email
@@ -43,29 +61,11 @@ function Profile(props) {
       setDisabled(true);
     } else {
       setErrorUser('');
-      if (!emailValid.message && !inputEventTarget.validationMessage) {
-        setDisabled(false);
-      } else {
-        if (values.email) {
-          if (
-            values.email.match(/^[\w]{1}[\w-.]*@[\w-]+\.[a-z]{1,4}$/i) === null
-          ) {
-            setEmailValid({
-              valid: false,
-              message: 'Некорректный адрес электронной почты ',
-            });
-          } else {
-            setEmailValid({ valid: true });
-          }
-        }
-        if (inputEventTarget.name === 'name') {
-          setNameValid(inputEventTarget.closest('input').checkValidity());
-          setErrors({
-            ...errors,
-            [inputEventTarget.name]: inputEventTarget.validationMessage,
-          });
-        }
+
+      if (emailValid.message || inputEventTarget.validationMessage) {
         setDisabled(true);
+      } else {
+        setDisabled(false);
       }
     }
   }, [values, errors]);
