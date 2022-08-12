@@ -7,6 +7,7 @@ function SearchForm(props) {
   const {
     searchCards,
     getInitialCards,
+    getInitialSaveCards,
     story,
     searchShortCards,
     pageSaveMovies,
@@ -33,8 +34,12 @@ function SearchForm(props) {
     e.preventDefault();
 
     if (!value) {
-      setIsError(true);
-      getInitialCards();
+      if (pageSaveMovies) {
+        getInitialSaveCards();
+      } else {
+        setIsError(true);
+        getInitialCards();
+      }
     } else {
       if (pageSaveMovies) {
         searchSaveCards(value, isToggle);
@@ -47,14 +52,6 @@ function SearchForm(props) {
 
   const resetInput = () => {
     if (value) {
-      localStorage.setItem(
-        'saveCards',
-        JSON.stringify({
-          isToggle: false,
-          value: '',
-          arr: story.arr,
-        })
-      );
       setIsToggle(false);
       setValue('');
     }

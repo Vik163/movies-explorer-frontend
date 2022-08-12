@@ -6,6 +6,8 @@ import './Register.css';
 import registerLogo from '../../images/logo.svg';
 
 function Register(props) {
+  const { handleRegister, errorMessage, formReset, resetErrors } = props;
+
   const [isName, setIsName] = useState('');
   const [values, setValues] = React.useState({
     name: '',
@@ -16,7 +18,7 @@ function Register(props) {
     name: '',
     password: '',
   });
-  const [target, setTarget] = React.useState({});
+  const [inputEventTarget, setInputEventTarget] = React.useState({});
   const [disabled, setDisabled] = React.useState(true);
   const [nameValid, setNameValid] = React.useState(false);
   const [emailValid, setEmailValid] = React.useState(false);
@@ -24,7 +26,8 @@ function Register(props) {
 
   //Ввод данных и валидация
   const handleChange = (event) => {
-    setTarget(event.target);
+    resetErrors();
+    setInputEventTarget(event.target);
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -43,13 +46,19 @@ function Register(props) {
         setEmailValid({ valid: true });
       }
     }
-    if (target.name === 'password') {
-      setPasswordValid(target.closest('input').checkValidity());
-      setErrors({ ...errors, [target.name]: target.validationMessage });
+    if (inputEventTarget.name === 'password') {
+      setPasswordValid(inputEventTarget.closest('input').checkValidity());
+      setErrors({
+        ...errors,
+        [inputEventTarget.name]: inputEventTarget.validationMessage,
+      });
     }
-    if (target.name === 'name') {
-      setNameValid(target.closest('input').checkValidity());
-      setErrors({ ...errors, [target.name]: target.validationMessage });
+    if (inputEventTarget.name === 'name') {
+      setNameValid(inputEventTarget.closest('input').checkValidity());
+      setErrors({
+        ...errors,
+        [inputEventTarget.name]: inputEventTarget.validationMessage,
+      });
     }
   }, [values]);
 
@@ -61,16 +70,18 @@ function Register(props) {
     }
   }, [emailValid, passwordValid]);
 
-  const resetForm = useCallback(() => {
-    setValues({ name: '', email: '', password: '' });
-    setErrors({});
-    setDisabled(true);
-  }, [setValues, setErrors, setDisabled]);
+  useEffect(() => {
+    if (formReset) {
+      setValues({ name: '', email: '', password: '' });
+      setErrors({});
+      setDisabled(true);
+    }
+  }, [formReset]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.handleRegister(values);
-    resetForm();
+    handleRegister(values);
+    setDisabled(false);
   };
 
   return (
@@ -157,7 +168,7 @@ function Register(props) {
           Зарегистрироваться
         </button>
       </form>
-      <span className='register__error'>{props.errorMessage}</span>
+      <span className='register__error'>{errorMessage}</span>
       <div className='register__caption'>
         <span>Уже зарегистрированы?</span>
         <Link className='register__caption-link button-hover' to='/sign-in'>

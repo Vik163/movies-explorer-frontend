@@ -6,7 +6,6 @@ import MoviesCardList from './MoviesCardList/MoviesCardList.js';
 
 function Movies(props) {
   const pageSaveMovies = false;
-
   const {
     cards,
     story,
@@ -19,7 +18,6 @@ function Movies(props) {
     addCard,
     savedCards,
     preloaderMessage,
-    preloaderMessageError,
   } = props;
 
   return (
@@ -31,10 +29,7 @@ function Movies(props) {
         searchShortCards={searchShortCards}
       />
       {isPreloader ? (
-        <Preloader
-          preloaderMessage={preloaderMessage}
-          preloaderMessageError={preloaderMessageError}
-        />
+        <Preloader preloaderMessage={preloaderMessage} />
       ) : (
         <MoviesCardList
           cards={cards}

@@ -4,10 +4,10 @@ import './Preloader.css';
 import './Spinner.css';
 
 function Preloader(props) {
-  const { preloaderMessage, preloaderMessageError } = props;
+  const { preloaderMessage } = props;
 
   const spinner = () => {
-    if (!preloaderMessage && !preloaderMessageError) {
+    if (!preloaderMessage) {
       return <div className='preloader__spinner' />;
     }
   };
@@ -17,9 +17,6 @@ function Preloader(props) {
       {spinner()}
       {preloaderMessage && (
         <span className='preloader__notFind'>{preloaderMessage}</span>
-      )}
-      {preloaderMessageError && (
-        <span className='preloader__error'>{preloaderMessageError}</span>
       )}
     </section>
   );

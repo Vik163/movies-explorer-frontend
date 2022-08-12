@@ -21,11 +21,11 @@ function MoviesCardList(props) {
   const [isMobile, setIsMobile] = useState(
     window.matchMedia('(max-width: 600px)').matches
   );
-  const index = (isDesktop && 12) || (isMobile && 5) || 8;
-  const [indexArray, setIndexArray] = useState(index);
+  const indexArrayCards = (isDesktop && 12) || (isMobile && 5) || 8;
+  const [indexArray, setIndexArray] = useState(indexArrayCards);
 
   useEffect(() => {
-    setIndexArray(index);
+    setIndexArray(indexArrayCards);
   }, [isDesktop, isMobile]);
 
   useEffect(() => {
@@ -65,11 +65,7 @@ function MoviesCardList(props) {
             pageSaveMovies={pageSaveMovies}
           />
         ))
-        .slice(
-          0,
-          !pageSaveMovies ? indexArray : 1000
-          // 2
-        )}
+        .slice(0, !pageSaveMovies ? indexArray : 1000)}
     </ul>
   );
 

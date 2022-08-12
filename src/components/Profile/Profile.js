@@ -18,14 +18,14 @@ function Profile(props) {
   const [errors, setErrors] = React.useState({
     name: '',
   });
-  const [target, setTarget] = React.useState({});
+  const [inputEventTarget, setInputEventTarget] = React.useState({});
   const [disabled, setDisabled] = React.useState(true);
   const [emailValid, setEmailValid] = React.useState(false);
   const [nameValid, setNameValid] = React.useState(false);
 
   //Ввод данных и валидация
   const handleChange = (event) => {
-    setTarget(event.target);
+    setInputEventTarget(event.target);
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -44,9 +44,12 @@ function Profile(props) {
         setEmailValid({ valid: true });
       }
     }
-    if (target.name === 'name') {
-      setNameValid(target.closest('input').checkValidity());
-      setErrors({ ...errors, [target.name]: target.validationMessage });
+    if (inputEventTarget.name === 'name') {
+      setNameValid(inputEventTarget.closest('input').checkValidity());
+      setErrors({
+        ...errors,
+        [inputEventTarget.name]: inputEventTarget.validationMessage,
+      });
     }
   }, [values]);
 

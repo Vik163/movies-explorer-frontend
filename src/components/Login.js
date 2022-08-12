@@ -6,19 +6,22 @@ import './Register/Register.css';
 import registerLogo from '../images/logo.svg';
 
 function Login(props) {
+  const { handleLogin, errorMessage, formReset, resetErrors } = props;
+
   const [isName, setIsName] = useState('');
   const [values, setValues] = React.useState(false);
   const [errors, setErrors] = React.useState({
     password: '',
   });
-  const [target, setTarget] = React.useState({});
+  const [inputEventTarget, setInputEventTarget] = React.useState({});
   const [disabled, setDisabled] = React.useState(true);
   const [emailValid, setEmailValid] = React.useState(false);
   const [passwordValid, setPasswordValid] = React.useState(false);
 
   //Ввод данных и валидация
   const handleChange = (event) => {
-    setTarget(event.target);
+    resetErrors();
+    setInputEventTarget(event.target);
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -37,9 +40,12 @@ function Login(props) {
         setEmailValid({ valid: true });
       }
     }
-    if (target.name === 'password') {
-      setPasswordValid(target.closest('input').checkValidity());
-      setErrors({ ...errors, [target.name]: target.validationMessage });
+    if (inputEventTarget.name === 'password') {
+      setPasswordValid(inputEventTarget.closest('input').checkValidity());
+      setErrors({
+        ...errors,
+        [inputEventTarget.name]: inputEventTarget.validationMessage,
+      });
     }
   }, [values]);
 
@@ -51,17 +57,18 @@ function Login(props) {
     }
   }, [emailValid, passwordValid]);
 
-  const resetForm = useCallback(() => {
-    setValues({ email: '', password: '' });
-    setErrors({});
-    setDisabled(true);
-  }, [setValues, setErrors, setDisabled]);
+  useEffect(() => {
+    if (formReset) {
+      setValues({ email: '', password: '' });
+      setErrors({});
+      setDisabled(true);
+    }
+  }, [formReset]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.handleLogin(values);
-
-    resetForm();
+    handleLogin(values);
+    setDisabled(false);
   };
 
   return (
@@ -125,7 +132,7 @@ function Login(props) {
           Войти
         </button>
       </form>
-      <span className='register__error-login'>{props.errorMessage}</span>
+      <span className='register__error-login'>{errorMessage}</span>
       <div className='register__caption'>
         <span>Ещё не зарегистрированы?</span>
         <Link className='register__caption-link button-hover' to='/sign-up'>

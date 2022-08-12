@@ -82,5 +82,5 @@ const baseUrl = `${window.location.protocol}${
 }`;
 
 export const mainApi = new MainApi({
-  baseUrl: 'http://localhost:3001',
+  baseUrl: baseUrl,
 });

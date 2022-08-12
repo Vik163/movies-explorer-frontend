@@ -24,25 +24,20 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const history = useHistory();
 
-  const [loggedIn, setLoggedIn] = useState(false);
-
+  const [formReset, setFormReset] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [errorNotFound, setErrorNotFound] = useState(false);
   const [errorPageMessage, setErrorPageMessage] = useState('');
   const [preloaderMessage, setPreloaderMessage] = useState('');
-  const [preloaderMessageError, setPreloaderMessageError] = useState('');
   const [isPreloader, setIsPreloader] = useState(false);
   const [initialSavedCards, setInitialSavedCards] = useState([]);
-  // console.log(initialSavedCards);
-  const [story, setStory] = useState(
-    JSON.parse(localStorage.getItem('saveCards'))
-  );
+  const [story, setStory] = useState(false);
   const [storySavePage, setStorySavePage] = useState({});
-  const [storyCards, setStoryCards] = useState([]);
-  // console.log(storyCards);
   const [cards, setCards] = useState([]);
-  // console.log(cards);
   const [savedCards, setSavedCards] = useState([]);
+  const loggedIn = localStorage.getItem('loggedIn');
+  const initialCards = JSON.parse(localStorage.getItem('initialCards'));
+  const storySaveCards = JSON.parse(localStorage.getItem('saveCards'));
 
   const checkToken = () => {
     const jwt = localStorage.getItem('jwt');
@@ -51,7 +46,9 @@ function App() {
       auth
         .checkToken(jwt)
         .then((res) => {
-          res && setLoggedIn(true);
+          res
+            ? localStorage.setItem('loggedIn', true)
+            : localStorage.setItem('loggedIn', false);
         })
         .catch((err) => {
           console.log(err);
@@ -64,40 +61,28 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (loggedIn && !errorNotFound) {
-      history.push('/movies');
-    }
-  }, [loggedIn]);
-
-  useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
-
-    if (jwt) {
-      if (story === {} || story === null) {
+    if (loggedIn) {
+      if (!initialCards) {
         moviesApi.getCards().then((cards) => {
           setCards(cards);
-          setStoryCards(cards);
+          localStorage.setItem('initialCards', JSON.stringify(cards));
         });
       } else {
-        setCards(story.arr);
+        if (!storySaveCards) {
+          setCards(initialCards);
+        } else {
+          setCards(storySaveCards.arr);
+        }
       }
     }
   }, [loggedIn]);
 
-  function getInitialCards() {
-    const jwt = localStorage.getItem('jwt');
-    console.log('i');
-    if (jwt) {
-      localStorage.removeItem('saveCards');
-      setStory({});
-      setCards(storyCards);
-    }
-  }
+  useEffect(() => {
+    setSavedCards(initialSavedCards);
+  }, [initialSavedCards]);
 
   useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
-
-    if (jwt) {
+    if (loggedIn) {
       Promise.all([mainApi.getUserInfo(), mainApi.getSaveCards()])
         .then(([userData, saveCards]) => {
           setCurrentUser(userData);
@@ -110,6 +95,20 @@ function App() {
         });
     }
   }, [loggedIn]);
+
+  function getInitialCards() {
+    if (loggedIn) {
+      setIsPreloader(false);
+      setCards(initialCards);
+    }
+  }
+
+  function getInitialSaveCards() {
+    if (loggedIn) {
+      setIsPreloader(false);
+      setSavedCards(initialSavedCards);
+    }
+  }
 
   function handleRegister({ name, password, email }) {
     return auth
@@ -124,7 +123,8 @@ function App() {
           ? setErrorMessage('При регистрации пользователя произошла ошибка')
           : handleErrors(err);
         console.log(err);
-      });
+      })
+      .finally(setFormReset(true));
   }
 
   function handleLogin({ password, email }) {
@@ -132,7 +132,7 @@ function App() {
       .authorization(password, email)
       .then((data) => {
         localStorage.setItem('jwt', data.token);
-        setLoggedIn(true);
+        localStorage.setItem('loggedIn', true);
         setCurrentUser(data.user);
         setErrorMessage('');
         history.push('/movies');
@@ -148,9 +148,9 @@ function App() {
   function signOut() {
     localStorage.removeItem('jwt');
     localStorage.removeItem('saveCards');
+    localStorage.removeItem('loggedIn');
 
     setStory({});
-    setLoggedIn(false);
     setCurrentUser({});
 
     history.push('/');
@@ -187,59 +187,49 @@ function App() {
   //Поиск в несохраненных картах
   function searchCards(value, isToggle) {
     setIsPreloader(true);
-    moviesApi
-      .getCards()
-      .then((cards) => {
-        if (cards) {
-          const arr = cards.filter((item) => {
-            if (item.nameRU && item.nameEN) {
-              //Переключатель - короткометражки
-              if (isToggle) {
-                if (item.duration < 40) {
-                  return (
-                    item.nameRU.toLowerCase().includes(value.toLowerCase()) ||
-                    item.nameEN.toLowerCase().includes(value.toLowerCase())
-                  );
-                }
-              } else {
-                return (
-                  item.nameRU.toLowerCase().includes(value.toLowerCase()) ||
-                  item.nameEN.toLowerCase().includes(value.toLowerCase())
-                );
-              }
+
+    if (initialCards) {
+      const arr = initialCards.filter((item) => {
+        if (item.nameRU && item.nameEN) {
+          //Переключатель - короткометражки
+          if (isToggle) {
+            if (item.duration < 40) {
+              return (
+                item.nameRU.toLowerCase().includes(value.toLowerCase()) ||
+                item.nameEN.toLowerCase().includes(value.toLowerCase())
+              );
             }
-          });
-          if (!(arr.length === 0)) {
-            setIsPreloader(false);
-            setCards(arr);
-            localStorage.setItem(
-              'saveCards',
-              JSON.stringify({
-                isToggle: isToggle,
-                value: value,
-                arr: arr,
-              })
-            );
-            setStory(JSON.parse(localStorage.getItem('saveCards')));
           } else {
-            setPreloaderMessage('Ничего не найдено');
+            return (
+              item.nameRU.toLowerCase().includes(value.toLowerCase()) ||
+              item.nameEN.toLowerCase().includes(value.toLowerCase())
+            );
           }
         }
-      })
-      .catch((err) => {
-        err &&
-          setPreloaderMessageError(
-            'Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
-          );
-        console.log(err);
       });
+      if (!(arr.length === 0)) {
+        setIsPreloader(false);
+        setCards(arr);
+        localStorage.setItem(
+          'saveCards',
+          JSON.stringify({
+            isToggle: isToggle,
+            value: value,
+            arr: arr,
+          })
+        );
+        setStory(JSON.parse(localStorage.getItem('saveCards')));
+      } else {
+        setPreloaderMessage('Ничего не найдено');
+      }
+    }
   }
 
   //Поиск сохраненных карт
   function searchSaveCards(value, isToggle) {
     setIsPreloader(true);
 
-    const arr = savedCards.filter((item) => {
+    const arr = initialSavedCards.filter((item) => {
       if (item.nameRU && item.nameEN) {
         if (isToggle) {
           if (item.duration < 40) {
@@ -267,7 +257,8 @@ function App() {
   //Отбор короткометражек
   function searchShortCards(isToggle, pageSaveMovies) {
     setIsPreloader(true);
-    const arrCards = pageSaveMovies ? savedCards : storyCards;
+
+    const arrCards = pageSaveMovies ? savedCards : initialCards;
 
     pageSaveMovies
       ? setStorySavePage({
@@ -303,6 +294,7 @@ function App() {
     mainApi
       .addCard(card)
       .then((saveCard) => {
+        setInitialSavedCards([saveCard, ...savedCards]);
         setSavedCards([saveCard, ...savedCards]);
       })
       .catch((err) => {
@@ -314,6 +306,9 @@ function App() {
     mainApi
       .deleteCard(card)
       .then(() => {
+        setInitialSavedCards((state) =>
+          state.filter((c) => !(c._id === card._id))
+        );
         setSavedCards((state) => state.filter((c) => !(c._id === card._id)));
       })
       .catch((err) => {
@@ -325,19 +320,30 @@ function App() {
     setErrorNotFound(true);
   }
 
+  function resetErrors() {
+    setErrorMessage('');
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
         <Switch>
-          <Route path='/sign-up'>
+          <ProtectedRoute path='/sign-up' loggedIn={loggedIn}>
             <Register
               handleRegister={handleRegister}
               errorMessage={errorMessage}
+              formReset={formReset}
+              resetErrors={resetErrors}
             />
-          </Route>
-          <Route path='/sign-in'>
-            <Login handleLogin={handleLogin} errorMessage={errorMessage} />
-          </Route>
+          </ProtectedRoute>
+          <ProtectedRoute path='/sign-in' loggedIn={loggedIn}>
+            <Login
+              handleLogin={handleLogin}
+              errorMessage={errorMessage}
+              formReset={formReset}
+              resetErrors={resetErrors}
+            />
+          </ProtectedRoute>
           <Route exact path='/'>
             <Header loggedIn={loggedIn} />
             <Main loggedIn={loggedIn} infoLink='Главная' />
@@ -365,7 +371,6 @@ function App() {
               savedCards={savedCards}
               isPreloader={isPreloader}
               preloaderMessage={preloaderMessage}
-              preloaderMessageError={preloaderMessageError}
             />
             <Footer />
           </ProtectedRoute>
@@ -373,6 +378,7 @@ function App() {
             <Header loggedIn={loggedIn} />
             <SavedMovies
               savedCards={savedCards}
+              getInitialSaveCards={getInitialSaveCards}
               story={storySavePage}
               deleteCard={deleteCard}
               searchSaveCards={searchSaveCards}
@@ -380,12 +386,12 @@ function App() {
               searchShortCards={searchShortCards}
               isPreloader={isPreloader}
               preloaderMessage={preloaderMessage}
-              preloaderMessageError={preloaderMessageError}
             />
             <Footer />
           </ProtectedRoute>
           <Route path='*'>
             <ErrorPage
+              errorNotFound={errorNotFound}
               errorPageMessage={errorPageMessage}
               addPageNotFound={addPageNotFound}
             />

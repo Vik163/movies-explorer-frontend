@@ -15,23 +15,21 @@ function SavedMovies(props) {
     deleteCard,
     isPreloader,
     initialSavedCards,
+    getInitialSaveCards,
     preloaderMessage,
-    preloaderMessageError,
   } = props;
 
   return (
     <main className='main'>
       <SearchForm
         searchSaveCards={searchSaveCards}
+        getInitialSaveCards={getInitialSaveCards}
         story={story}
         pageSaveMovies={pageSaveMovies}
         searchShortCards={searchShortCards}
       />
       {isPreloader ? (
-        <Preloader
-          preloaderMessage={preloaderMessage}
-          preloaderMessageError={preloaderMessageError}
-        />
+        <Preloader preloaderMessage={preloaderMessage} />
       ) : (
         <MoviesCardList
           savedCards={savedCards}

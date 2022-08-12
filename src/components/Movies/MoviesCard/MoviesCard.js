@@ -14,10 +14,7 @@ function MoviesCard(props) {
     pageSaveMovies,
   } = props;
 
-  console.log(card);
-
   const currentUser = React.useContext(CurrentUserContext);
-  console.log(initialSavedCards);
 
   //Поиск сохранненых карточек
   const isLiked = useCallback(() => {
@@ -27,7 +24,6 @@ function MoviesCard(props) {
         (i.owner === currentUser._id && i.movieId === card.id)
     );
   }, [savedCards, pageSaveMovies]);
-  console.log(savedCards);
 
   //Установка иконок сохраненным фильмам
   const iconSavedMovies = pageSaveMovies
