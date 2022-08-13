@@ -50,13 +50,6 @@ function SearchForm(props) {
     }
   };
 
-  const resetInput = () => {
-    if (value) {
-      setIsToggle(false);
-      setValue('');
-    }
-  };
-
   const resetForm = useCallback(() => {
     setIsError(false);
   }, [setIsError]);
@@ -77,7 +70,6 @@ function SearchForm(props) {
           minLength='2'
           onChange={handleChange}
           value={value ?? ''}
-          onClick={resetInput}
           required
         />
         {isError && (

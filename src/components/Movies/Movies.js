@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import SearchForm from './SearchForm/SearchForm.js';
 import Preloader from './Preloader/Preloader.js';
@@ -12,6 +12,7 @@ function Movies(props) {
     searchCards,
     getInitialCards,
     initialSavedCards,
+    getInitialSaveCards,
     searchShortCards,
     isPreloader,
     deleteCard,
@@ -19,6 +20,10 @@ function Movies(props) {
     savedCards,
     preloaderMessage,
   } = props;
+
+  useEffect(() => {
+    getInitialSaveCards();
+  }, []);
 
   return (
     <main className='main'>

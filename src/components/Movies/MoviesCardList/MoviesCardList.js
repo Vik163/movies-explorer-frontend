@@ -14,6 +14,7 @@ function MoviesCardList(props) {
     initialSavedCards,
   } = props;
 
+  //Не получилось вынести переменные в отдельный файл, либо они зависят от других значений, либо меняется логика. Виноват!
   //Кнопка ещё
   const [isDesktop, setIsDesktop] = useState(
     window.matchMedia('(min-width: 928px)').matches
@@ -21,11 +22,11 @@ function MoviesCardList(props) {
   const [isMobile, setIsMobile] = useState(
     window.matchMedia('(max-width: 600px)').matches
   );
-  const indexArrayCards = (isDesktop && 12) || (isMobile && 5) || 8;
-  const [indexArray, setIndexArray] = useState(indexArrayCards);
+  const numberAddCards = (isDesktop && 12) || (isMobile && 5) || 8;
+  const [indexArray, setIndexArray] = useState(numberAddCards);
 
   useEffect(() => {
-    setIndexArray(indexArrayCards);
+    setIndexArray(numberAddCards);
   }, [isDesktop, isMobile]);
 
   useEffect(() => {

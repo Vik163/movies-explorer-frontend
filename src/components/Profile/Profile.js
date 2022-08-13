@@ -5,6 +5,8 @@ import './Profile.css';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function Profile(props) {
+  const { signOut, handleUpdateUser, errorMessage, getInitialSaveCards } =
+    props;
   const currentUser = React.useContext(CurrentUserContext);
 
   const [isToggle, setIsToggle] = useState(false);
@@ -21,6 +23,10 @@ function Profile(props) {
   const [inputEventTarget, setInputEventTarget] = React.useState({});
   const [disabled, setDisabled] = React.useState(true);
   const [emailValid, setEmailValid] = React.useState(false);
+
+  useEffect(() => {
+    getInitialSaveCards();
+  }, []);
 
   //Ввод данных и валидация
   const handleChange = (event) => {
@@ -78,7 +84,7 @@ function Profile(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.handleUpdateUser(values);
+    handleUpdateUser(values);
     setInputDisabled(true);
     resetForm();
   };
@@ -149,7 +155,7 @@ function Profile(props) {
         </button>
       </form>
       <span className='profile__error'>
-        {props.errorMessage}
+        {errorMessage}
         {errorUser}
       </span>
       <div
@@ -159,10 +165,7 @@ function Profile(props) {
         <span className='profile__edit button-hover' onClick={toggle}>
           Редактировать
         </span>
-        <span
-          className='profile__caption-link button-hover'
-          onClick={props.signOut}
-        >
+        <span className='profile__caption-link button-hover' onClick={signOut}>
           Выйти из аккаунта
         </span>
       </div>

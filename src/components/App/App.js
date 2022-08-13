@@ -72,6 +72,7 @@ function App() {
           setCards(initialCards);
         } else {
           setCards(storySaveCards.arr);
+          setStory(storySaveCards);
         }
       }
     }
@@ -107,6 +108,7 @@ function App() {
     if (loggedIn) {
       setIsPreloader(false);
       setSavedCards(initialSavedCards);
+      setStorySavePage({});
     }
   }
 
@@ -119,12 +121,12 @@ function App() {
         }
       })
       .catch((err) => {
+        setFormReset(true);
         err.message === 'Ошибка: Bad Request'
           ? setErrorMessage('При регистрации пользователя произошла ошибка')
           : handleErrors(err);
         console.log(err);
-      })
-      .finally(setFormReset(true));
+      });
   }
 
   function handleLogin({ password, email }) {
@@ -138,6 +140,7 @@ function App() {
         history.push('/movies');
       })
       .catch((err) => {
+        setFormReset(true);
         err.message === 'Ошибка: Bad Request'
           ? setErrorMessage('При авторизации пользователя произошла ошибка')
           : handleErrors(err);
@@ -149,6 +152,7 @@ function App() {
     localStorage.removeItem('jwt');
     localStorage.removeItem('saveCards');
     localStorage.removeItem('loggedIn');
+    localStorage.removeItem('initialCards');
 
     setStory({});
     setCurrentUser({});
@@ -249,6 +253,11 @@ function App() {
     if (!(arr.length === 0)) {
       setIsPreloader(false);
       setSavedCards(arr);
+      setStorySavePage({
+        isToggle: isToggle,
+        value: value,
+        arr: arr,
+      });
     } else {
       setPreloaderMessage('Ничего не найдено');
     }
@@ -261,12 +270,8 @@ function App() {
     const arrCards = pageSaveMovies ? savedCards : initialCards;
 
     pageSaveMovies
-      ? setStorySavePage({
-          isToggle: isToggle,
-        })
-      : setStory({
-          isToggle: isToggle,
-        });
+      ? setStorySavePage({ ...storySavePage, isToggle: isToggle })
+      : setStory({ ...story, isToggle: isToggle });
 
     if (isToggle) {
       const arr = arrCards.filter((item) => {
@@ -280,13 +285,10 @@ function App() {
       }
     } else {
       setIsPreloader(false);
-      story.arr
-        ? pageSaveMovies
-          ? setSavedCards(story.arr)
-          : setCards(story.arr)
-        : pageSaveMovies
-        ? setSavedCards(initialSavedCards)
-        : setCards(arrCards);
+      story.arr ? setCards(story.arr) : setCards(arrCards);
+      storySavePage.arr
+        ? setSavedCards(storySavePage.arr)
+        : setSavedCards(initialSavedCards);
     }
   }
 
@@ -346,7 +348,7 @@ function App() {
           </ProtectedRoute>
           <Route exact path='/'>
             <Header loggedIn={loggedIn} />
-            <Main loggedIn={loggedIn} infoLink='Главная' />
+            <Main getInitialSaveCards={getInitialSaveCards} />
             <Footer />
           </Route>
           <ProtectedRoute path='/profile' loggedIn={loggedIn}>
@@ -355,6 +357,7 @@ function App() {
               signOut={signOut}
               handleUpdateUser={handleUpdateUser}
               errorMessage={errorMessage}
+              getInitialSaveCards={getInitialSaveCards}
             />
           </ProtectedRoute>
           <ProtectedRoute path='/movies' loggedIn={loggedIn}>
@@ -363,6 +366,7 @@ function App() {
               cards={cards}
               story={story}
               getInitialCards={getInitialCards}
+              getInitialSaveCards={getInitialSaveCards}
               searchCards={searchCards}
               searchShortCards={searchShortCards}
               addCard={addCard}
