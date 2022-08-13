@@ -13,3 +13,4 @@
  домен - vik.diplom.nomoredomains.xyz
 * [Ссылка на страницу](https://vik.diplom.nomoredomains.xyz)
 * [Ссылка на pull requests](https://github.com/Vik163/movies-explorer-frontend/pull/2)
+* [Ссылка на макет](https://www.figma.com/file/Epk6R45sgvlIg9rJEmLa7U/Diploma-(Copy)?node-id=932%3A3228)
