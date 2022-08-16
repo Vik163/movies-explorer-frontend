@@ -76,16 +76,12 @@
 }
 
 .register__input-error {
-  /* display: none; */
+  display: none;
   color: #ee3465;
   position: absolute;
   left: 0;
-  top: 50px;
+  top: 48px;
   z-index: 2;
-}
-
-.register__input-error_active {
-  display: block;
 }
 
 .register__input {
@@ -100,7 +96,7 @@
   line-height: 17px;
   font-weight: 400;
   outline: none;
-  margin: 5px 0 24px;
+  margin: 5px 0 32px;
 }
 
 .register__input:-webkit-autofill {
@@ -124,6 +120,12 @@
   margin-top: 128px;
 }
 
+.register__submit:disabled {
+  background-color: #f8f8f8;
+  color: #c2c2c2;
+  cursor: default;
+}
+
 @media screen and (max-width: 600px) {
   .register__submit {
     font-size: 12px;
@@ -144,7 +146,7 @@
 
 .register__error {
   position: absolute;
-  top: 510px;
+  top: 540px;
   text-align: center;
   font-size: 11px;
   line-height: 13px;
@@ -154,12 +156,34 @@
 
 @media screen and (max-width: 928px) {
   .register__error {
-    top: 670px;
+    top: 700px;
   }
 }
 
 @media screen and (max-width: 600px) {
   .register__error {
+    top: 660px;
+  }
+}
+
+.register__error-login {
+  position: absolute;
+  top: 530px;
+  text-align: center;
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: 400;
+  color: #ee3465;
+}
+
+@media screen and (max-width: 928px) {
+  .register__error-login {
+    top: 670px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .register__error-login {
     top: 630px;
   }
 }

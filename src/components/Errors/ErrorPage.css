@@ -38,6 +38,7 @@
 .errorPage__message {
   margin: 0;
   width: 400px;
+  text-align: center;
   font-size: 16px;
   line-height: 19px;
   font-weight: 400;

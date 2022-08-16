@@ -17,6 +17,7 @@
 }
 
 .searchForm__form {
+  position: relative;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -36,6 +37,17 @@
     padding-bottom: 8px;
     margin-top: 85px;
   }
+}
+.searchForm__input-error {
+  display: none;
+  color: #ee3465;
+  position: absolute;
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 400;
+  left: 0;
+  top: 55px;
+  z-index: 2;
 }
 
 .searchForm__input {

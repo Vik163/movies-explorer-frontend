@@ -86,6 +86,10 @@
   background-image: url(../../../images/heart.svg);
 }
 
+.moviesCard__icon_delete {
+  background-image: url(../../../images/d4.svg);
+}
+
 .moviesCard__duration {
   position: absolute;
   left: 14px;

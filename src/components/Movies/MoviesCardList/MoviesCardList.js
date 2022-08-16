@@ -5,28 +5,28 @@ import './MoviesCardList.css';
 import Card from '../MoviesCard/MoviesCard.js';
 
 function MoviesCardList(props) {
+  const {
+    cards,
+    deleteCard,
+    addCard,
+    savedCards,
+    pageSaveMovies,
+    initialSavedCards,
+  } = props;
+
+  //Не получилось вынести переменные в отдельный файл, либо они зависят от других значений, либо меняется логика. Виноват!
+  //Кнопка ещё
   const [isDesktop, setIsDesktop] = useState(
     window.matchMedia('(min-width: 928px)').matches
   );
   const [isMobile, setIsMobile] = useState(
     window.matchMedia('(max-width: 600px)').matches
   );
-  const index = (isDesktop && 12) || (isMobile && 5) || 8;
-
-  const [indexArray, setIndexArray] = useState(index);
-
-  const { cards } = props;
-
-  const moviesCardList = (
-    <ul className='moviesCardList__container'>
-      {cards
-        .map((card) => <Card card={card} key={card._id} isMobile={isMobile} />)
-        .slice(0, indexArray)}
-    </ul>
-  );
+  const numberAddCards = (isDesktop && 12) || (isMobile && 5) || 8;
+  const [indexArray, setIndexArray] = useState(numberAddCards);
 
   useEffect(() => {
-    setIndexArray(index);
+    setIndexArray(numberAddCards);
   }, [isDesktop, isMobile]);
 
   useEffect(() => {
@@ -45,26 +45,46 @@ function MoviesCardList(props) {
       window
         .matchMedia('(max-width: 600px)')
         .removeEventListener('change', handler);
-  }, []);
+  }, [isDesktop]);
 
   const addMovies = () => {
     isDesktop ? setIndexArray(indexArray + 3) : setIndexArray(indexArray + 2);
   };
 
+  const moviesCardList = (
+    <ul className='moviesCardList__container'>
+      {cards
+        .map((card) => (
+          <Card
+            card={card}
+            key={card.id || card._id}
+            isMobile={isMobile}
+            addCard={addCard}
+            initialSavedCards={initialSavedCards}
+            deleteCard={deleteCard}
+            savedCards={savedCards}
+            pageSaveMovies={pageSaveMovies}
+          />
+        ))
+        .slice(0, !pageSaveMovies ? indexArray : 1000)}
+    </ul>
+  );
+
   return (
     <section className='moviesCardList'>
       <>
         {moviesCardList}
-        {moviesCardList.props.children.length < cards.length && (
-          <button
-            className='moviesCardList__button-else button-hover'
-            aria-label='in'
-            type='button'
-            onClick={addMovies}
-          >
-            Ещё
-          </button>
-        )}
+        {!pageSaveMovies &&
+          moviesCardList.props.children.length < cards.length && (
+            <button
+              className='moviesCardList__button-else button-hover'
+              aria-label='in'
+              type='button'
+              onClick={addMovies}
+            >
+              Ещё
+            </button>
+          )}
       </>
     </section>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import './Main.css';
 
@@ -8,7 +8,11 @@ import AboutProject from './AboutProject/AboutProject.js';
 import Techs from './Techs/Techs.js';
 import Portfolio from './Portfolio/Portfolio.js';
 
-function Main() {
+function Main(props) {
+  useEffect(() => {
+    props.getInitialSaveCards();
+  }, []);
+
   return (
     <main className='main'>
       <Promo />
