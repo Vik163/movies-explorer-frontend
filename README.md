@@ -40,6 +40,7 @@
 
 ***
 
+* [Pull request](https://github.com/Vik163/movies-explorer-frontend/pulls?q=is%3Apr+is%3Aclosed)
 * домен - vik.diplom.nomoredomains.xyz
 * бэкенд - [movies-explorer-api](https://github.com/Vik163/movies-explorer-api)
 * [Ссылка на макет](https://www.figma.com/file/Epk6R45sgvlIg9rJEmLa7U/Diploma-(Copy)?node-id=932%3A3228)
