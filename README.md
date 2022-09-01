@@ -7,7 +7,7 @@
 3. Страница с сохранёнными фильмами. Показывает фильмы, сохранённые пользователем.
 4. Создайте свой профиль.
 
-* Сайт дипломного проекта: [vik.diplom.nomoredomains.xyz](vik.diplom.nomoredomains.xyz)
+* Сайт дипломного проекта: [http://vik.diplom.nomoredomains.xyz/](http://vik.diplom.nomoredomains.xyz/)
 
 * Имя проекта: movies-explorer-frontend 
 
