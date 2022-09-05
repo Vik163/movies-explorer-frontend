@@ -39,6 +39,7 @@ function App() {
   const initialCards = JSON.parse(localStorage.getItem('initialCards'));
   const storySaveCards = JSON.parse(localStorage.getItem('saveCards'));
 
+  // Проверка авторизации ------------------------
   const checkToken = () => {
     const jwt = localStorage.getItem('jwt');
 
@@ -59,7 +60,9 @@ function App() {
   useEffect(() => {
     checkToken();
   }, []);
+  // ----------------------------------------------
 
+  // Получение первоначальных карт --------------------------------
   useEffect(() => {
     if (loggedIn) {
       if (!initialCards) {
@@ -69,19 +72,22 @@ function App() {
         });
       } else {
         if (!storySaveCards) {
+          // Отсутствует история
           setCards(initialCards);
         } else {
-          setCards(storySaveCards.arr);
+          setCards(storySaveCards.arr); // Есть история
           setStory(storySaveCards);
         }
       }
     }
   }, [loggedIn]);
 
+  // Карты пользователя --------------
   useEffect(() => {
     setSavedCards(initialSavedCards);
   }, [initialSavedCards]);
 
+  // Получение карт пользователя и его данных --------------------
   useEffect(() => {
     if (loggedIn) {
       Promise.all([mainApi.getUserInfo(), mainApi.getSaveCards()])
@@ -97,6 +103,7 @@ function App() {
     }
   }, [loggedIn]);
 
+  // получение первоначальных карт при пустом инпуте поиска фильмов
   function getInitialCards() {
     if (loggedIn) {
       setIsPreloader(false);
@@ -104,6 +111,7 @@ function App() {
     }
   }
 
+  // получение первоначальных карт пользователя
   function getInitialSaveCards() {
     if (loggedIn) {
       setIsPreloader(false);
@@ -112,6 +120,7 @@ function App() {
     }
   }
 
+  // Регистрация с немедленной авторизацией
   function handleRegister({ name, password, email }) {
     return auth
       .registration(name, password, email)
@@ -160,6 +169,7 @@ function App() {
     history.push('/');
   }
 
+  // Обновление пользователя -------------------------
   function handleUpdateUser(obj) {
     mainApi
       .sendInfoProfile(obj)
@@ -195,8 +205,8 @@ function App() {
     if (initialCards) {
       const arr = initialCards.filter((item) => {
         if (item.nameRU && item.nameEN) {
-          //Переключатель - короткометражки
           if (isToggle) {
+            //Переключатель - короткометражки
             if (item.duration < 40) {
               return (
                 item.nameRU.toLowerCase().includes(value.toLowerCase()) ||
@@ -214,6 +224,7 @@ function App() {
       if (!(arr.length === 0)) {
         setIsPreloader(false);
         setCards(arr);
+        // История поиска
         localStorage.setItem(
           'saveCards',
           JSON.stringify({
@@ -222,6 +233,7 @@ function App() {
             arr: arr,
           })
         );
+        // строка в объект + рендер ------------------------------
         setStory(JSON.parse(localStorage.getItem('saveCards')));
       } else {
         setPreloaderMessage('Ничего не найдено');
@@ -267,13 +279,16 @@ function App() {
   function searchShortCards(isToggle, pageSaveMovies) {
     setIsPreloader(true);
 
+    // Выбор массива карт ------------------------------------
     const arrCards = pageSaveMovies ? savedCards : initialCards;
 
+    // Обновление в истории состояния переключателя короткометражек
     pageSaveMovies
       ? setStorySavePage({ ...storySavePage, isToggle: isToggle })
       : setStory({ ...story, isToggle: isToggle });
 
     if (isToggle) {
+      // Короткометражки
       const arr = arrCards.filter((item) => {
         return item.duration < 40;
       });
@@ -285,6 +300,7 @@ function App() {
       }
     } else {
       setIsPreloader(false);
+      // Обновление фильмов в истории
       story.arr ? setCards(story.arr) : setCards(arrCards);
       storySavePage.arr
         ? setSavedCards(storySavePage.arr)
@@ -292,6 +308,7 @@ function App() {
     }
   }
 
+  // Добавление и удаление карт ----------------------
   function addCard(card) {
     mainApi
       .addCard(card)
@@ -317,11 +334,14 @@ function App() {
         console.log(err);
       });
   }
+  // ------------------------------------------------------
 
+  // Страница 404 ------------
   function addPageNotFound() {
     setErrorNotFound(true);
   }
 
+  // Сообщение об ошибке в Profile
   function resetErrors() {
     setErrorMessage('');
   }

@@ -15,6 +15,7 @@ function Navigation(props) {
         style={{ display: isAddInfo.display }}
       ></div>
       {isAddInfo.src === closeIcon ? (
+        // Открытая панель навигации -----------------------------------------
         <div className='header__menu' style={{ display: isAddInfo.display }}>
           <div className='header__menu-links'>
             <Link
@@ -34,6 +35,7 @@ function Navigation(props) {
           />
         </div>
       ) : (
+        // Cкрытая панель навигации -----------------------------------------
         <img
           className='header__icon button-hover'
           onClick={toggle}

@@ -29,6 +29,7 @@ function Login(props) {
     setValues({ ...values, [name]: value });
   };
 
+  // Валидация email и password ----------------------------------------------
   useEffect(() => {
     if (values.email) {
       if (values.email.match(/^[\w]{1}[\w-.]*@[\w-]+\.[a-z]{2,4}$/i) === null) {
@@ -49,6 +50,7 @@ function Login(props) {
     }
   }, [values]);
 
+  // Переключение активности кнопки submit ---
   useEffect(() => {
     if (emailValid.valid && passwordValid) {
       setDisabled(false);
@@ -57,6 +59,7 @@ function Login(props) {
     }
   }, [emailValid, passwordValid]);
 
+  // Сброс -------------------------------
   useEffect(() => {
     if (formReset) {
       setValues({ email: '', password: '' });
@@ -115,6 +118,7 @@ function Login(props) {
             minLength='6'
             required
           />
+          {/* Показать ошибку валидации */}
           {isName === 'password' && (
             <span
               className='register__input-error'

@@ -35,6 +35,7 @@ function Register(props) {
     setValues({ ...values, [name]: value });
   };
 
+  // Валидация name, email и password ----------------------------------------------
   useEffect(() => {
     if (values.email) {
       if (values.email.match(/^[\w]{1}[\w-.]*@[\w-]+\.[a-z]{2,4}$/i) === null) {
@@ -62,6 +63,7 @@ function Register(props) {
     }
   }, [values]);
 
+  // Переключение активности кнопки submit ---
   useEffect(() => {
     if (emailValid.valid && passwordValid && nameValid) {
       setDisabled(false);
@@ -70,6 +72,7 @@ function Register(props) {
     }
   }, [emailValid, passwordValid]);
 
+  // Сброс -------------------------------
   useEffect(() => {
     if (formReset) {
       setValues({ name: '', email: '', password: '' });
@@ -129,6 +132,7 @@ function Register(props) {
             name='email'
             required
           />
+          {/* Показать ошибку валидации */}
           {isName === 'email' && (
             <span
               className='register__input-error'
@@ -151,6 +155,7 @@ function Register(props) {
             minLength='6'
             required
           />
+          {/* Показать ошибку валидации */}
           {isName === 'password' && (
             <span
               className='register__input-error'

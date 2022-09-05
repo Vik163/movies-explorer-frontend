@@ -6,17 +6,12 @@ import './Spinner.css';
 function Preloader(props) {
   const { preloaderMessage } = props;
 
-  const spinner = () => {
-    if (!preloaderMessage) {
-      return <div className='preloader__spinner' />;
-    }
-  };
-
   return (
     <section className='preloader'>
-      {spinner()}
-      {preloaderMessage && (
+      {preloaderMessage ? (
         <span className='preloader__notFind'>{preloaderMessage}</span>
+      ) : (
+        <div className='preloader__spinner' />
       )}
     </section>
   );

@@ -16,7 +16,7 @@ function MoviesCard(props) {
 
   const currentUser = React.useContext(CurrentUserContext);
 
-  //Поиск сохранненых карточек
+  // Состояние лайка карты -----------------
   const isLiked = useCallback(() => {
     return initialSavedCards.some(
       (i) =>
@@ -25,7 +25,7 @@ function MoviesCard(props) {
     );
   }, [savedCards, pageSaveMovies]);
 
-  //Установка иконок сохраненным фильмам
+  // Установка иконок сохраненным фильмам -------------------------
   const iconSavedMovies = pageSaveMovies
     ? 'moviesCard__icon_delete'
     : 'moviesCard__icon_active';
@@ -33,7 +33,9 @@ function MoviesCard(props) {
   const cardLikeButtonClassName = `moviesCard__icon button-hover ${
     isLiked() && iconSavedMovies
   }`;
+  // --------------------------------------------------------------
 
+  // Добавление и удаление карты -------------------------------
   const handleLike = () => {
     if (!isLiked()) {
       addCard(card);
@@ -42,6 +44,7 @@ function MoviesCard(props) {
     }
   };
 
+  // Перевод времени в часы и минуты ----------
   const getTime = (min) => {
     const hours = Math.trunc(min / 60);
     const minutes = min % 60;

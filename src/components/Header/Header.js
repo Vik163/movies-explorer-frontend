@@ -18,6 +18,7 @@ function Header(props) {
     src: icon__Toggle,
   });
 
+  // Ссылки на страницы фильмов --------------------------------
   const headerInfo = (
     <div className='header__navbar'>
       <Link
@@ -35,6 +36,7 @@ function Header(props) {
     </div>
   );
 
+  // Кнопки регистрации и авторизации --------------------------------
   const headerRegister = (
     <div className='header__register-container'>
       <Link className='header__register button-hover' to='/sign-up'>
@@ -52,7 +54,7 @@ function Header(props) {
     </div>
   );
 
-  //Контроль размера страницы
+  // Контроль размера страницы -----------------------------------------
   useEffect(() => {
     const handler = (e) => setIsDesktop(e.matches);
     window.matchMedia('(min-width: 780px)').addEventListener('change', handler);
@@ -62,7 +64,7 @@ function Header(props) {
         .removeEventListener('change', handler);
   }, []);
 
-  //Установка формы кнопки навигации
+  // Установка формы кнопки навигации ----------------------------
   useEffect(() => {
     isToggle
       ? setIsAddInfo({ display: 'flex', src: closeIcon })

@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 import './ErrorPage.css';
 
 function ErrorPage(props) {
+  const { errorPageMessage } = props;
+
   useEffect(() => {
     props.addPageNotFound();
   }, []);
-  const { errorPageMessage } = props;
+
   return (
     <div className='errorPage'>
       <h2 className='errorPage__status'>

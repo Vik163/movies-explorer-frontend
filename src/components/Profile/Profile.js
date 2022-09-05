@@ -38,6 +38,7 @@ function Profile(props) {
     setValues({ ...values, [name]: value });
   };
 
+  // Валидация email и name ----------------------------------------------
   useEffect(() => {
     if (values.email) {
       if (values.email.match(/^[\w]{1}[\w-.]*@[\w-]+\.[a-z]{1,4}$/i) === null) {
@@ -57,7 +58,8 @@ function Profile(props) {
     }
   }, [values]);
 
-  //Поиск сравнения вводимых данных, данным зарегистророванного пользователя
+  // Поиск сравнения вводимых данных, данным зарегистророванного пользователя
+  // Переключение активности кнопки submit ---------------------
   useEffect(() => {
     if (
       values.name === currentUser.name &&
@@ -76,6 +78,7 @@ function Profile(props) {
     }
   }, [values, errors]);
 
+  // Сброс -------------------------------
   const resetForm = useCallback(() => {
     setValues({});
     setErrors({});
@@ -89,6 +92,7 @@ function Profile(props) {
     resetForm();
   };
 
+  // Переключатель кнопки сохранить ----
   const toggle = () => {
     setIsToggle(!isToggle);
     setInputDisabled(false);
@@ -138,6 +142,7 @@ function Profile(props) {
             disabled={inputDisabled}
             required
           />
+          {/* Показать ошибку валидации */}
           {isName === 'email' && (
             <span className='profile__input-error' style={{ display: 'block' }}>
               {emailValid.message}
@@ -148,6 +153,7 @@ function Profile(props) {
           className='profile__submit button-hover'
           type='submit'
           onClick={toggle}
+          // Изменение кнопки "сохранить" -----------
           style={{ display: !isToggle && 'none' }}
           disabled={disabled}
         >
@@ -158,6 +164,7 @@ function Profile(props) {
         {errorMessage}
         {errorUser}
       </span>
+      {/* Изменение кнопки "редактировать" */}
       <div
         className='profile__edit-container'
         style={{ display: isToggle && 'none' }}

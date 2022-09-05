@@ -17,12 +17,13 @@ function SearchForm(props) {
   const [value, setValue] = React.useState('');
   const [isToggle, setIsToggle] = useState(false);
 
+  // Значение инпута поиска ----------------------
   const handleChange = (e) => {
     setValue(e.target.value);
     setIsError(e.target.validationMessage);
   };
 
-  // история формы поиска
+  // История формы поиска -------------------------
   useEffect(() => {
     if (!(story === {} || story === null)) {
       setIsToggle(story.isToggle);
@@ -34,22 +35,24 @@ function SearchForm(props) {
     e.preventDefault();
 
     if (!value) {
+      // Страница сохранненых фильмов с пустым инпутом
       if (pageSaveMovies) {
-        getInitialSaveCards();
+        getInitialSaveCards(); // получение первоначальных карт пользователя
       } else {
         setIsError(true);
-        getInitialCards();
+        getInitialCards(); // получение первоначальных карт
       }
     } else {
       if (pageSaveMovies) {
-        searchSaveCards(value, isToggle);
+        searchSaveCards(value, isToggle); // поиск в картах пользователя
       } else {
-        searchCards(value, isToggle);
+        searchCards(value, isToggle); // поиск в первоначальных картах
         resetForm();
       }
     }
   };
 
+  // Сброс ошибки валидации ---------------
   const resetForm = useCallback(() => {
     setIsError(false);
   }, [setIsError]);
@@ -73,6 +76,7 @@ function SearchForm(props) {
           required
         />
         {isError && (
+          // Ошибка валидации ----------
           <span
             className='searchForm__input-error'
             style={{ display: 'block' }}
@@ -86,6 +90,7 @@ function SearchForm(props) {
         ></button>
       </form>
       <div className='searchForm__checkbox-container button-hover'>
+        {/* checkbox --------------------------- */}
         <input
           type='checkbox'
           className={`searchForm__checkbox ${

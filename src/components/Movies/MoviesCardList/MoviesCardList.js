@@ -14,21 +14,23 @@ function MoviesCardList(props) {
     initialSavedCards,
   } = props;
 
-  //Не получилось вынести переменные в отдельный файл, либо они зависят от других значений, либо меняется логика. Виноват!
-  //Кнопка ещё
+  // Кнопка ещё ---------------------------------------
+  // Точки перелома -------------------------
   const [isDesktop, setIsDesktop] = useState(
     window.matchMedia('(min-width: 928px)').matches
   );
   const [isMobile, setIsMobile] = useState(
     window.matchMedia('(max-width: 600px)').matches
   );
+  // Количество отображаемых карт в зависимости от ширины экрана ---
   const numberAddCards = (isDesktop && 12) || (isMobile && 5) || 8;
   const [indexArray, setIndexArray] = useState(numberAddCards);
 
   useEffect(() => {
     setIndexArray(numberAddCards);
   }, [isDesktop, isMobile]);
-
+  // ---------------------------------------------------------------
+  // Точки перелома ----------------------------------------------------------
   useEffect(() => {
     const handler = (e) => setIsDesktop(e.matches);
     window.matchMedia('(min-width: 928px)').addEventListener('change', handler);
@@ -46,7 +48,9 @@ function MoviesCardList(props) {
         .matchMedia('(max-width: 600px)')
         .removeEventListener('change', handler);
   }, [isDesktop]);
+  // ---------------------------------------------------------------------------
 
+  // Добавление карт в зависимости от ширины экрана ---------------------------
   const addMovies = () => {
     isDesktop ? setIndexArray(indexArray + 3) : setIndexArray(indexArray + 2);
   };
@@ -69,11 +73,13 @@ function MoviesCardList(props) {
         .slice(0, !pageSaveMovies ? indexArray : 1000)}
     </ul>
   );
+  // -------------------------------------------------------------------------
 
   return (
     <section className='moviesCardList'>
       <>
         {moviesCardList}
+        {/* Кнопка еще только на странице несохраненных фильмов */}
         {!pageSaveMovies &&
           moviesCardList.props.children.length < cards.length && (
             <button
